@@ -16,11 +16,12 @@
 
 package com.example.android.tvleanback.ui;
 
-import android.app.Activity;
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
-import androidx.leanback.app.GuidedStepFragment;
+import androidx.fragment.app.FragmentActivity;
+import androidx.leanback.app.GuidedStepSupportFragment;
 import androidx.leanback.widget.GuidanceStylist;
 import androidx.leanback.widget.GuidedAction;
 import android.text.InputType;
@@ -30,18 +31,19 @@ import com.example.android.tvleanback.R;
 
 import java.util.List;
 
-public class AuthenticationActivity extends Activity {
+public class AuthenticationActivity extends FragmentActivity {
     private static final int CONTINUE = 2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (null == savedInstanceState) {
-            GuidedStepFragment.addAsRoot(this, new FirstStepFragment(), android.R.id.content);
+            GuidedStepSupportFragment.addAsRoot(this, new FirstStepFragment(), android.R.id.content);
         }
+
     }
 
-    public static class FirstStepFragment extends GuidedStepFragment {
+    public static class FirstStepFragment extends GuidedStepSupportFragment {
 
         @Override
         public int onProvideTheme() {
@@ -59,22 +61,27 @@ public class AuthenticationActivity extends Activity {
 
         @Override
         public void onCreateActions(@NonNull List<GuidedAction> actions, Bundle savedInstanceState) {
-            GuidedAction enterUsername = new GuidedAction.Builder()
+            GuidedAction enterUsername = new GuidedAction.Builder(getContext())
                     .title(getString(R.string.pref_title_username))
                     .descriptionEditable(true)
                     .build();
-            GuidedAction enterPassword = new GuidedAction.Builder()
+            GuidedAction enterPassword = new GuidedAction.Builder(getContext())
                     .title(getString(R.string.pref_title_password))
                     .descriptionEditable(true)
                     .descriptionInputType(InputType.TYPE_TEXT_VARIATION_PASSWORD | InputType.TYPE_CLASS_TEXT)
                     .build();
-            GuidedAction login = new GuidedAction.Builder()
+
+            GuidedAction login = new GuidedAction.Builder(getContext())
                     .id(CONTINUE)
                     .title(getString(R.string.guidedstep_continue))
                     .build();
+
+
             actions.add(enterUsername);
             actions.add(enterPassword);
             actions.add(login);
+
+
         }
 
         @Override
@@ -83,6 +90,7 @@ public class AuthenticationActivity extends Activity {
                 // TODO Authenticate your account
                 // Assume the user was logged in
                 Toast.makeText(getActivity(), "Welcome!", Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(getContext(),VerticalGridActivity.class));
                 getActivity().finishAfterTransition();
             }
         }

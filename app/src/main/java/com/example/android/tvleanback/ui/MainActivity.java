@@ -16,10 +16,12 @@
 
 package com.example.android.tvleanback.ui;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.util.Log;
 
 import com.example.android.tvleanback.R;
 
@@ -27,6 +29,10 @@ import com.example.android.tvleanback.R;
  * MainActivity class that loads MainFragment.
  */
 public class MainActivity extends LeanbackActivity {
+
+    private int LOUNCH_OnboardingActivity = 1;
+    private int LOUNCH_AuthenticationActivity = 2;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,7 +40,28 @@ public class MainActivity extends LeanbackActivity {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         if(!sharedPreferences.getBoolean(OnboardingFragment.COMPLETED_ONBOARDING, false)) {
             // This is the first time running the app, let's go to onboarding
-            startActivity(new Intent(this, OnboardingActivity.class));
+            //startActivity(new Intent(this, OnboardingActivity.class));
+            Intent louncher = new Intent(this,OnboardingActivity.class);
+            startActivityForResult(louncher, LOUNCH_OnboardingActivity);
         }
     }
+
+    private static final String TAG = "MainActivity";
+    
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == LOUNCH_OnboardingActivity) {
+            if(resultCode == Activity.RESULT_OK){
+              //  finish();
+              //  Intent louncher = new Intent(this,VerticalGridActivity.class);
+              //  startActivityForResult(louncher, LOUNCH_AuthenticationActivity);
+            }
+
+            if (resultCode == Activity.RESULT_CANCELED) {
+                //Write your code if there's no result
+            }
+        }
+    }//onActivityResult
 }

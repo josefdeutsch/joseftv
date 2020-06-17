@@ -25,8 +25,8 @@ import androidx.preference.PreferenceScreen;
 
 import com.example.android.tvleanback.R;
 
-public class SettingsFragment extends LeanbackSettingsFragment
-        implements DialogPreference.TargetFragment {
+public class SettingsFragment extends LeanbackSettingsFragment implements DialogPreference.TargetFragment {
+
     private final static String PREFERENCE_RESOURCE_ID = "preferenceResource";
     private final static String PREFERENCE_ROOT = "root";
     private PreferenceFragment mPreferenceFragment;

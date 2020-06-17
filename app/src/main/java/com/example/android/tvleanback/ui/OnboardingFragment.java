@@ -20,6 +20,7 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
+import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.drawable.AnimationDrawable;
@@ -69,6 +70,7 @@ public class OnboardingFragment extends OnboardingSupportFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Set the logo to display a splash animation
         setLogoResourceId(R.drawable.videos_by_google_banner);
+        setStartButtonText("hello");
         return super.onCreateView(inflater, container, savedInstanceState);
     }
 
@@ -79,9 +81,13 @@ public class OnboardingFragment extends OnboardingSupportFragment {
         // Update the shared preferences
         SharedPreferences.Editor sharedPreferencesEditor =
             PreferenceManager.getDefaultSharedPreferences(getActivity()).edit();
-        sharedPreferencesEditor.putBoolean(COMPLETED_ONBOARDING, false);
+        // true to not loop interface...
+        sharedPreferencesEditor.putBoolean(COMPLETED_ONBOARDING, true);
         sharedPreferencesEditor.apply();
         // Let's go back to the MainActivity
+
+        Intent returnIntent = new Intent();
+        getActivity().setResult(Activity.RESULT_OK,returnIntent);
         getActivity().finish();
     }
 
@@ -145,6 +151,7 @@ public class OnboardingFragment extends OnboardingSupportFragment {
         set.start();
         mContentAnimator = set;
     }
+
     @Override
     protected Animator onCreateEnterAnimation() {
         mContentView.setImageDrawable(getResources().getDrawable(pageImages[0]));
@@ -152,6 +159,7 @@ public class OnboardingFragment extends OnboardingSupportFragment {
         mContentAnimator = createFadeInAnimator(mContentView);
         return mContentAnimator;
     }
+
     private Animator createFadeInAnimator(View view) {
         return ObjectAnimator.ofFloat(view, View.ALPHA, 0.0f, 1.0f).setDuration(ANIMATION_DURATION);
     }
