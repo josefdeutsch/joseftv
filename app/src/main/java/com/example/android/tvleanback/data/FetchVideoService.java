@@ -21,8 +21,13 @@ import android.content.ContentValues;
 import android.content.Intent;
 import android.util.Log;
 import com.example.android.tvleanback.R;
+
+import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -32,6 +37,7 @@ import java.util.List;
 
 public class FetchVideoService extends IntentService {
     private static final String TAG = "FetchVideoService";
+    String inputs = "{\"googlevideos\":[{\"category\":\"Google+\",\"videos\":[{\"description\":\"Lorem Ipsum...\",\"sources\":\"[http://joseph3d.com/wp-content/uploads/2019/06/g0001.mp4]\",\"card\":\"http://joseph3d.com/wp-content/uploads/2019/06/00010621.png\",\"background\":\"http://joseph3d.com/wp-content/uploads/2019/06/00010621.png\",\"title\":\"material :gold, sculpture0 :abstract\",\"studio\":\"Google+\"}]}]}";
 
     /**
      * Creates an IntentService with a default name for the worker thread.
@@ -43,11 +49,17 @@ public class FetchVideoService extends IntentService {
 
     @Override
     protected void onHandleIntent(Intent workIntent) {
+
+        String data = workIntent.getStringExtra("data");
+
+        Log.d(TAG, "onHandleIntent: "+data);
+
         VideoDbBuilder builder = new VideoDbBuilder(getApplicationContext());
 
         try {
             List<ContentValues> contentValuesList =
-                    builder.fetch(getResources().getString(R.string.catalog_url));
+                   builder.fetch(data);
+                  //builder.fetch(inputs);
 
             ContentValues[] downloadedVideoContentValues =
                     contentValuesList.toArray(new ContentValues[contentValuesList.size()]);
@@ -59,4 +71,5 @@ public class FetchVideoService extends IntentService {
             e.printStackTrace();
         }
     }
+
 }

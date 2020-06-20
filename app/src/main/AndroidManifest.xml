@@ -93,7 +93,14 @@
             android:name=".ui.VerticalGridActivity"
             android:exported="true"
             android:parentActivityName=".ui.MainActivity"
-            android:theme="@style/Theme.Leanback.VerticalGrid" />
+            android:theme="@style/Theme.Leanback.VerticalGrid">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+
+        </activity>
         <activity android:name=".ui.SearchActivity" />
         <activity
             android:name=".ui.GuidedStepActivity"

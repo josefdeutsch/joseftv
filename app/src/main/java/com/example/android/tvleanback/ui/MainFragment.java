@@ -1,3 +1,5 @@
+package com.example.android.tvleanback.ui;
+
 /*
  * Copyright (c) 2014 The Android Open Source Project
  *
@@ -14,7 +16,6 @@
  * limitations under the License.
  */
 
-package com.example.android.tvleanback.ui;
 
 import android.content.Context;
 import android.content.Intent;
@@ -326,7 +327,7 @@ public class MainFragment extends BrowseSupportFragment
     private final class ItemViewClickedListener implements OnItemViewClickedListener {
         @Override
         public void onItemClicked(Presenter.ViewHolder itemViewHolder, Object item,
-                RowPresenter.ViewHolder rowViewHolder, Row row) {
+                                  RowPresenter.ViewHolder rowViewHolder, Row row) {
 
             if (item instanceof Video) {
                 Video video = (Video) item;
@@ -372,7 +373,7 @@ public class MainFragment extends BrowseSupportFragment
     private final class ItemViewSelectedListener implements OnItemViewSelectedListener {
         @Override
         public void onItemSelected(Presenter.ViewHolder itemViewHolder, Object item,
-                RowPresenter.ViewHolder rowViewHolder, Row row) {
+                                   RowPresenter.ViewHolder rowViewHolder, Row row) {
             if (item instanceof Video) {
                 mBackgroundURI = Uri.parse(((Video) item).bgImageUrl);
                 startBackgroundTimer();
@@ -381,3 +382,4 @@ public class MainFragment extends BrowseSupportFragment
         }
     }
 }
+

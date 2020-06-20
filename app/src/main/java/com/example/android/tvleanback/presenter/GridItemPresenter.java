@@ -31,7 +31,7 @@ public class GridItemPresenter extends Presenter {
     private final MainFragment mainFragment;
 
     public GridItemPresenter(MainFragment mainFragment) {
-        this.mainFragment = mainFragment;
+    this.mainFragment = mainFragment;
     }
 
     @Override

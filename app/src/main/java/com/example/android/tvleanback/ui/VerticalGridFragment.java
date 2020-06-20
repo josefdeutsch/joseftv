@@ -35,6 +35,7 @@ import androidx.loader.content.CursorLoader;
 import androidx.loader.content.Loader;
 import android.view.View;
 import com.example.android.tvleanback.R;
+import com.example.android.tvleanback.data.FetchVideoService;
 import com.example.android.tvleanback.data.VideoContract;
 import com.example.android.tvleanback.model.Video;
 import com.example.android.tvleanback.model.VideoCursorMapper;
@@ -48,8 +49,7 @@ public class VerticalGridFragment extends VerticalGridSupportFragment
         implements LoaderManager.LoaderCallbacks<Cursor> {
 
     private static final int NUM_COLUMNS = 5;
-    private final CursorObjectAdapter mVideoCursorAdapter =
-            new CursorObjectAdapter(new CardPresenter());
+    private final CursorObjectAdapter mVideoCursorAdapter = new CursorObjectAdapter(new CardPresenter());
     private static final int ALL_VIDEOS_LOADER = 1;
 
     @Override
@@ -59,7 +59,12 @@ public class VerticalGridFragment extends VerticalGridSupportFragment
         mVideoCursorAdapter.setMapper(new VideoCursorMapper());
         setAdapter(mVideoCursorAdapter);
 
-        setTitle(getString(R.string.vertical_grid_title));
+        //setTitle(getString(R.string.vertical_grid_title));
+
+        //CustomTitleView titleView = new CustomTitleView(getActivity());
+        //titleView.setTitle("hello");
+
+        //setTitleView(titleView);
 
         if (savedInstanceState == null) {
             prepareEntranceTransition();
@@ -69,6 +74,7 @@ public class VerticalGridFragment extends VerticalGridSupportFragment
 
     private void setupFragment() {
         VerticalGridPresenter gridPresenter = new VerticalGridPresenter();
+
         gridPresenter.setNumberOfColumns(NUM_COLUMNS);
         setGridPresenter(gridPresenter);
 

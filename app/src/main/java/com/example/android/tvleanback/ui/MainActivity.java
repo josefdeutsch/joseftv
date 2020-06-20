@@ -1,3 +1,5 @@
+package com.example.android.tvleanback.ui;
+
 /*
  * Copyright (c) 2014 The Android Open Source Project
  *
@@ -14,7 +16,6 @@
  * limitations under the License.
  */
 
-package com.example.android.tvleanback.ui;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -47,16 +48,16 @@ public class MainActivity extends LeanbackActivity {
     }
 
     private static final String TAG = "MainActivity";
-    
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == LOUNCH_OnboardingActivity) {
             if(resultCode == Activity.RESULT_OK){
-              //  finish();
-              //  Intent louncher = new Intent(this,VerticalGridActivity.class);
-              //  startActivityForResult(louncher, LOUNCH_AuthenticationActivity);
+                //  finish();
+                //  Intent louncher = new Intent(this,VerticalGridActivity.class);
+                //  startActivityForResult(louncher, LOUNCH_AuthenticationActivity);
             }
 
             if (resultCode == Activity.RESULT_CANCELED) {
