@@ -38,25 +38,12 @@
 
     <application
         android:allowBackup="false"
-        android:banner="@drawable/videos_by_google_banner"
+        android:banner="@drawable/movie"
         android:icon="@drawable/app_icon_quantum"
         android:label="@string/app_name"
-        android:logo="@drawable/videos_by_google_banner"
+        android:logo="@drawable/movie"
         android:theme="@style/Theme.Leanback"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity
-            android:name=".ui.MainActivity"
-            android:icon="@drawable/videos_by_google_banner"
-            android:label="@string/app_name"
-            android:logo="@drawable/videos_by_google_banner"
-            android:screenOrientation="landscape"
-            android:theme="@style/Theme.Leanback.Browse">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LEANBACK_LAUNCHER" />
-            </intent-filter>
-        </activity>
 
         <activity android:name=".mobile.MobileWelcomeActivity">
             <intent-filter>
@@ -92,12 +79,11 @@
         <activity
             android:name=".ui.VerticalGridActivity"
             android:exported="true"
-            android:parentActivityName=".ui.MainActivity"
             android:theme="@style/Theme.Leanback.VerticalGrid">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
+                <category android:name="android.intent.category.LEANBACK_LAUNCHER" />
             </intent-filter>
 
         </activity>

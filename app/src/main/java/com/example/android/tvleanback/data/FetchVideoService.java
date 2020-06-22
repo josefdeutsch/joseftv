@@ -30,6 +30,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.example.android.tvleanback.data.VideoContract.VideoEntry.CONTENT_URI;
+
 /**
  * FetchVideoService is responsible for fetching the videos from the Internet and inserting the
  * results into a local SQLite database.
@@ -37,7 +39,6 @@ import java.util.List;
 
 public class FetchVideoService extends IntentService {
     private static final String TAG = "FetchVideoService";
-    String inputs = "{\"googlevideos\":[{\"category\":\"Google+\",\"videos\":[{\"description\":\"Lorem Ipsum...\",\"sources\":\"[http://joseph3d.com/wp-content/uploads/2019/06/g0001.mp4]\",\"card\":\"http://joseph3d.com/wp-content/uploads/2019/06/00010621.png\",\"background\":\"http://joseph3d.com/wp-content/uploads/2019/06/00010621.png\",\"title\":\"material :gold, sculpture0 :abstract\",\"studio\":\"Google+\"}]}]}";
 
     /**
      * Creates an IntentService with a default name for the worker thread.
@@ -57,6 +58,8 @@ public class FetchVideoService extends IntentService {
         VideoDbBuilder builder = new VideoDbBuilder(getApplicationContext());
 
         try {
+            getApplicationContext().getContentResolver().delete(CONTENT_URI, String.valueOf(1), null);
+
             List<ContentValues> contentValuesList =
                    builder.fetch(data);
                   //builder.fetch(inputs);
@@ -64,8 +67,9 @@ public class FetchVideoService extends IntentService {
             ContentValues[] downloadedVideoContentValues =
                     contentValuesList.toArray(new ContentValues[contentValuesList.size()]);
 
-            getApplicationContext().getContentResolver().bulkInsert(VideoContract.VideoEntry.CONTENT_URI,
+            getApplicationContext().getContentResolver().bulkInsert(CONTENT_URI,
                     downloadedVideoContentValues);
+
         } catch (IOException | JSONException e) {
             Log.e(TAG, "Error occurred in downloading videos");
             e.printStackTrace();

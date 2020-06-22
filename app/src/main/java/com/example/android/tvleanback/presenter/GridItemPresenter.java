@@ -25,14 +25,13 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.android.tvleanback.R;
-import com.example.android.tvleanback.ui.MainFragment;
 
 public class GridItemPresenter extends Presenter {
-    private final MainFragment mainFragment;
+   // private final MainFragment mainFragment;
 
-    public GridItemPresenter(MainFragment mainFragment) {
-    this.mainFragment = mainFragment;
-    }
+   // public GridItemPresenter(MainFragment mainFragment) {
+   // this.mainFragment = mainFragment;
+   // }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent) {

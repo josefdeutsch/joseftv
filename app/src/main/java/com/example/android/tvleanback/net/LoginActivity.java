@@ -65,31 +65,38 @@ public class LoginActivity extends LeanbackActivity
                     myRef.addValueEventListener(new ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
+
                             // This method is called once with the initial value and again
                             // whenever data at this location is updated.
-                            String data = "";
+
+                           /** String data = "";
                             try {
                                 data = createJson();
                             } catch (JSONException e) {
                                 e.printStackTrace();
-                            }
+                            }**/
 
-                            Intent serviceIntent = new Intent(getApplicationContext(), FetchVideoService.class);
-                            serviceIntent.putExtra("data",data);
-                            getApplication().startService(serviceIntent);
                             String value = dataSnapshot.child("png").getValue().toString();
+                            Log.d(TAG, "onDataChange: "+value);
+                            Intent serviceIntent = new Intent(getApplicationContext(), FetchVideoService.class);
+                            serviceIntent.putExtra("data",value);
+                            getApplication().startService(serviceIntent);
+
                             Log.d(TAG, "Value is: " + value);
                         }
 
                         private String createJson() throws JSONException {
+
                             ArrayList<String> goldPng = supplyArrayGoldPng(new ArrayList());
                             ArrayList<String> goldMp4 = supplyArrayGoldMp4(new ArrayList());
+
                             JSONObject jsonObject = new JSONObject();
                             JSONArray googlevideos = new JSONArray();
                             JSONObject data = new JSONObject();
                             JSONArray sources = new JSONArray();
 
                             for (int i = 0; i <= goldMp4.size() - 1; i++) {
+
                                 JSONObject sum = new JSONObject();
                                 sum.put("description", "LoremIpsum...");
                                 JSONArray path = new JSONArray();
@@ -100,6 +107,7 @@ public class LoginActivity extends LeanbackActivity
                                 sum.put("title", "material");
                                 sum.put("studio", "Google+");
                                 sources.put(sum);
+
                             }
                             data.put("category", "Google+");
                             data.put("videos", sources);

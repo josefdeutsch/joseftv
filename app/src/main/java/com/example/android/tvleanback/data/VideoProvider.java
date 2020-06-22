@@ -257,6 +257,8 @@ public class VideoProvider extends ContentProvider {
             mContentResolver.notifyChange(uri, null);
         }
 
+
+
         return rowsDeleted;
     }
 

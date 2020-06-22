@@ -79,4 +79,5 @@ public class VideoDbHelper extends SQLiteOpenHelper {
         // Do the same thing as upgrading...
         onUpgrade(db, oldVersion, newVersion);
     }
+
 }
