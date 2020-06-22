@@ -60,7 +60,10 @@ public class VerticalGridActivity extends LoginActivity implements  View.OnClick
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.vertical_grid);
-        getWindow().setBackgroundDrawableResource(R.drawable.grid_bg);
+     //   getWindow().setBackgroundDrawableResource(R.drawable.grid_bg);
+
+
+        getWindow().setBackgroundDrawableResource(R.color.default_background);
 
         mSignInButton = findViewById(R.id.sign_in_button);
         mSignInButton.setSize(SignInButton.SIZE_WIDE);
