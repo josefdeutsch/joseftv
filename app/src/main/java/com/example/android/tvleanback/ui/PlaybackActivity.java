@@ -20,6 +20,8 @@ import android.os.Bundle;
 import androidx.fragment.app.Fragment;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
+import android.view.View;
+import android.widget.FrameLayout;
 
 import com.example.android.tvleanback.R;
 
@@ -36,10 +38,12 @@ public class PlaybackActivity extends LeanbackActivity {
     private boolean gamepadTriggerPressed = false;
     private PlaybackFragment mPlaybackFragment;
 
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_playback);
+
         Fragment fragment =
                 getSupportFragmentManager().findFragmentByTag(getString(R.string.playback_tag));
         if (fragment instanceof PlaybackFragment) {
@@ -87,4 +91,5 @@ public class PlaybackActivity extends LeanbackActivity {
         }
         return super.onGenericMotionEvent(event);
     }
+
 }

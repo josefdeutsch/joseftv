@@ -17,6 +17,8 @@
 package com.example.android.tvleanback.player;
 
 import android.content.Context;
+
+import androidx.leanback.media.PlaybackGlue;
 import androidx.leanback.media.PlaybackTransportControlGlue;
 import androidx.leanback.widget.Action;
 import androidx.leanback.widget.ArrayObjectAdapter;
@@ -24,6 +26,7 @@ import androidx.leanback.widget.PlaybackControlsRow;
 
 import com.google.android.exoplayer2.ext.leanback.LeanbackPlayerAdapter;
 
+import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -70,7 +73,7 @@ public class VideoPlayerGlue extends PlaybackTransportControlGlue<LeanbackPlayer
     public VideoPlayerGlue(
             Context context,
             LeanbackPlayerAdapter playerAdapter,
-            OnActionClickedListener actionListener) {
+            OnActionClickedListener actionListener,PlayerCallback playerCallback) {
         super(context, playerAdapter);
 
         mActionListener = actionListener;
@@ -85,7 +88,11 @@ public class VideoPlayerGlue extends PlaybackTransportControlGlue<LeanbackPlayer
         mThumbsDownAction = new PlaybackControlsRow.ThumbsDownAction(context);
         mThumbsDownAction.setIndex(PlaybackControlsRow.ThumbsDownAction.INDEX_OUTLINE);
         mRepeatAction = new PlaybackControlsRow.RepeatAction(context);
+
+       addPlayerCallback(playerCallback);
+
     }
+
 
     @Override
     protected void onCreatePrimaryActions(ArrayObjectAdapter adapter) {
@@ -98,6 +105,7 @@ public class VideoPlayerGlue extends PlaybackTransportControlGlue<LeanbackPlayer
         adapter.add(mRewindAction);
         adapter.add(mFastForwardAction);
         adapter.add(mSkipNextAction);
+
     }
 
     @Override

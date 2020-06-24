@@ -22,6 +22,11 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.FrameLayout;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.leanback.app.VideoFragment;
 import androidx.leanback.app.VideoFragmentGlueHost;
 import androidx.leanback.app.VideoSupportFragment;
@@ -102,8 +107,15 @@ public class PlaybackFragment extends VideoSupportFragment {
                 .initLoader(VideoLoaderCallbacks.QUEUE_VIDEOS_LOADER, args, mVideoLoaderCallbacks);
 
         mVideoCursorAdapter = setupRelatedVideosCursor();
-    }
 
+    }
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        // controls view are initially visible, make it invisible
+        // if app has called hideControlsOverlay() before view created.
+     //    hideControlsOverlay(false);
+    }
     @Override
     public void onStart() {
         super.onStart();
@@ -141,6 +153,8 @@ public class PlaybackFragment extends VideoSupportFragment {
             releasePlayer();
         }
     }
+    private FrameLayout mPlaybackFragmentLayout;
+
 
     private void initializePlayer() {
         BandwidthMeter bandwidthMeter = new DefaultBandwidthMeter();
@@ -151,10 +165,23 @@ public class PlaybackFragment extends VideoSupportFragment {
         mPlayer = ExoPlayerFactory.newSimpleInstance(getActivity(), mTrackSelector);
         mPlayerAdapter = new LeanbackPlayerAdapter(getActivity(), mPlayer, UPDATE_DELAY);
         mPlaylistActionListener = new PlaylistActionListener(mPlaylist);
-        mPlayerGlue = new VideoPlayerGlue(getActivity(), mPlayerAdapter, mPlaylistActionListener);
+
+        mPlayerGlue = new VideoPlayerGlue(getActivity(), mPlayerAdapter, mPlaylistActionListener, new PlaybackGlue.PlayerCallback() {
+            @Override
+            public void onPlayCompleted(PlaybackGlue glue) {
+                super.onPlayCompleted(glue);
+             //   mPlaybackFragmentLayout =  getActivity().findViewById(R.id.playback_controls_fragment);
+             //   mPlaybackFragmentLayout.setVisibility(View.GONE);
+
+                mPlaylistActionListener.onNext();
+            }
+        });
+
         mPlayerGlue.setHost(new VideoSupportFragmentGlueHost(this));
         mPlayerGlue.playWhenPrepared();
 
+        mPlayerGlue.setControlsOverlayAutoHideEnabled(false);
+        hideControlsOverlay(false);
         play(mVideo);
 
         ArrayObjectAdapter mRowsAdapter = initializeRelatedVideosRow();
@@ -190,6 +217,7 @@ public class PlaybackFragment extends VideoSupportFragment {
                         null);
 
         mPlayer.prepare(mediaSource);
+
     }
 
     private ArrayObjectAdapter initializeRelatedVideosRow() {
