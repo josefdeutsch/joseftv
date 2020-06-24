@@ -15,6 +15,7 @@
  */
 
 package com.example.android.tvleanback.model;
+
 import android.database.Cursor;
 import androidx.leanback.database.CursorMapper;
 import com.example.android.tvleanback.data.VideoContract;
@@ -22,6 +23,7 @@ import com.example.android.tvleanback.data.VideoContract;
 /**
  * VideoCursorMapper maps a database Cursor to a Video object.
  */
+
 public final class VideoCursorMapper extends CursorMapper {
 
     private static int idIndex;

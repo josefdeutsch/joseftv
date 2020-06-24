@@ -45,7 +45,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4;
 @RunWith(AndroidJUnit4.class)
 public class VideoDbIntegrationTest {
 
-    private Context mContext;
+  /**  private Context mContext;
 
     @Before
     public void setup() {
@@ -229,5 +229,5 @@ public class VideoDbIntegrationTest {
         );
         assertThat(mCursor.getCount()).isGreaterThan(0); // Confirm database was populated
         mCursor.close();
-    }
+    }**/
 }

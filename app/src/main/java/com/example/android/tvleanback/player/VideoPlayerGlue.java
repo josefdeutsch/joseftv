@@ -89,7 +89,7 @@ public class VideoPlayerGlue extends PlaybackTransportControlGlue<LeanbackPlayer
         mThumbsDownAction.setIndex(PlaybackControlsRow.ThumbsDownAction.INDEX_OUTLINE);
         mRepeatAction = new PlaybackControlsRow.RepeatAction(context);
 
-       addPlayerCallback(playerCallback);
+        addPlayerCallback(playerCallback);
 
     }
 

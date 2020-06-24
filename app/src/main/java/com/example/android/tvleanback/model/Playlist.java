@@ -27,6 +27,18 @@ public class Playlist {
     private List<Video> playlist;
     private int currentPosition;
 
+    public List<Video> getPlaylist() {
+        return playlist;
+    }
+
+    public void setPlaylist(List<Video> playlist) {
+        this.playlist = playlist;
+    }
+
+    public int getCurrentPosition() {
+        return currentPosition;
+    }
+
     public Playlist() {
         playlist = new ArrayList<>();
         currentPosition = 0;

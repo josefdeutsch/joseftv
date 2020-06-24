@@ -59,7 +59,7 @@ public class VerticalGridFragment extends VerticalGridSupportFragment
         mVideoCursorAdapter.setMapper(new VideoCursorMapper());
         setAdapter(mVideoCursorAdapter);
 
-        setTitle("Digital Art is true.");
+        setTitle("Digital art is true.");
 
         //CustomTitleView titleView = new CustomTitleView(getActivity());
         //titleView.setTitle("hello");

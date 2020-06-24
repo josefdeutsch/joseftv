@@ -24,6 +24,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -91,6 +92,8 @@ public class PlaybackFragment extends VideoSupportFragment {
     private VideoLoaderCallbacks mVideoLoaderCallbacks;
     private CursorObjectAdapter mVideoCursorAdapter;
 
+    private final Integer mIndex = 1;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -109,13 +112,15 @@ public class PlaybackFragment extends VideoSupportFragment {
         mVideoCursorAdapter = setupRelatedVideosCursor();
 
     }
+
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         // controls view are initially visible, make it invisible
         // if app has called hideControlsOverlay() before view created.
-     //    hideControlsOverlay(false);
+        //    hideControlsOverlay(false);
     }
+
     @Override
     public void onStart() {
         super.onStart();
@@ -132,7 +137,9 @@ public class PlaybackFragment extends VideoSupportFragment {
         }
     }
 
-    /** Pauses the player. */
+    /**
+     * Pauses the player.
+     */
     @TargetApi(Build.VERSION_CODES.N)
     @Override
     public void onPause() {
@@ -153,6 +160,7 @@ public class PlaybackFragment extends VideoSupportFragment {
             releasePlayer();
         }
     }
+
     private FrameLayout mPlaybackFragmentLayout;
 
 
@@ -170,10 +178,15 @@ public class PlaybackFragment extends VideoSupportFragment {
             @Override
             public void onPlayCompleted(PlaybackGlue glue) {
                 super.onPlayCompleted(glue);
-             //   mPlaybackFragmentLayout =  getActivity().findViewById(R.id.playback_controls_fragment);
-             //   mPlaybackFragmentLayout.setVisibility(View.GONE);
 
-                mPlaylistActionListener.onNext();
+                if (mPlaylist.getCurrentPosition() + 1 == mPlaylist.size()) {
+                    for (int i = 0; i < mPlaylist.size() - 1; i++) {
+                        mPlaylistActionListener.onPrevious();
+                    }
+                    
+                } else {
+                    mPlaylistActionListener.onNext();
+                }
             }
         });
 
@@ -273,7 +286,9 @@ public class PlaybackFragment extends VideoSupportFragment {
         mPlayerGlue.fastForward();
     }
 
-    /** Opens the video details page when a related video has been clicked. */
+    /**
+     * Opens the video details page when a related video has been clicked.
+     */
     private final class ItemViewClickedListener implements OnItemViewClickedListener {
         @Override
         public void onItemClicked(
@@ -290,19 +305,22 @@ public class PlaybackFragment extends VideoSupportFragment {
 
                 Bundle bundle =
                         ActivityOptionsCompat.makeSceneTransitionAnimation(
-                                        getActivity(),
-                                        ((ImageCardView) itemViewHolder.view).getMainImageView(),
-                                        VideoDetailsActivity.SHARED_ELEMENT_NAME)
+                                getActivity(),
+                                ((ImageCardView) itemViewHolder.view).getMainImageView(),
+                                VideoDetailsActivity.SHARED_ELEMENT_NAME)
                                 .toBundle();
                 getActivity().startActivity(intent, bundle);
             }
         }
     }
 
-    /** Loads a playlist with videos from a cursor and also updates the related videos cursor. */
+    /**
+     * Loads a playlist with videos from a cursor and also updates the related videos cursor.
+     */
     protected class VideoLoaderCallbacks implements LoaderManager.LoaderCallbacks<Cursor> {
 
         static final int RELATED_VIDEOS_LOADER = 1;
+
         static final int QUEUE_VIDEOS_LOADER = 2;
 
         private final VideoCursorMapper mVideoCursorMapper = new VideoCursorMapper();
@@ -322,9 +340,12 @@ public class PlaybackFragment extends VideoSupportFragment {
                     VideoContract.VideoEntry.CONTENT_URI,
                     null,
                     VideoContract.VideoEntry.COLUMN_CATEGORY + " = ?",
-                    new String[] {category},
+                    new String[]{category},
                     null);
         }
+
+
+        // es muss nur ein fragment geben
 
         @Override
         public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
@@ -333,16 +354,18 @@ public class PlaybackFragment extends VideoSupportFragment {
             }
             int id = loader.getId();
             if (id == QUEUE_VIDEOS_LOADER) {
+
                 playlist.clear();
                 do {
-                    Video video = (Video) mVideoCursorMapper.convert(cursor);
 
+                    Video video = (Video) mVideoCursorMapper.convert(cursor);
                     // Set the current position to the selected video.
                     if (video.id == mVideo.id) {
                         playlist.setCurrentPosition(playlist.size());
                     }
-
                     playlist.add(video);
+
+                    // Shared Pref
 
                 } while (cursor.moveToNext());
             } else if (id == RELATED_VIDEOS_LOADER) {
