@@ -123,4 +123,9 @@ public class VerticalGridActivity extends LoginActivity implements  View.OnClick
             mVerticalGridLayout.setVisibility(LinearLayout.VISIBLE);
         }
     }
+
+    @Override
+    public void onBackPressed(){
+        this.finish();
+    }
 }

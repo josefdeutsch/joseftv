@@ -166,7 +166,9 @@ public class LoginActivity extends LeanbackActivity
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
         //  Log.d(TAG, "onConnectionFailed:" + connectionResult);
-        Toast.makeText(this, "Google Play Services error.", Toast.LENGTH_SHORT).show();
+
+        Toast.makeText(this, "please try again..", Toast.LENGTH_SHORT).show();
+        hideProgressingView();
     }
 
     ViewGroup progressView;
