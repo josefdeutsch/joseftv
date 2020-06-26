@@ -32,6 +32,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.SignInButton;
 import com.google.firebase.auth.FirebaseUser;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 public class VerticalGridActivity extends LoginActivity implements  View.OnClickListener {
 
@@ -40,6 +41,7 @@ public class VerticalGridActivity extends LoginActivity implements  View.OnClick
      */
 
     private FrameLayout mVerticalGridLayout;
+    private ConstraintLayout mMainFrame;
     private SignInButton mSignInButton;
     private String userId;
 
@@ -55,6 +57,8 @@ public class VerticalGridActivity extends LoginActivity implements  View.OnClick
         //mProgressBarManager.setRootView(root);
 
         getWindow().setBackgroundDrawableResource(R.color.default_background);
+
+        mMainFrame = findViewById(R.id.signIn_layout);
 
         mSignInButton = findViewById(R.id.sign_in_button);
         mSignInButton.setSize(SignInButton.SIZE_WIDE);
@@ -114,6 +118,7 @@ public class VerticalGridActivity extends LoginActivity implements  View.OnClick
     public void updateUI(FirebaseUser user) {
         if (user != null) {
             userId=user.getUid();
+            mMainFrame.setVisibility(LinearLayout.GONE);
             mSignInButton.setVisibility(LinearLayout.GONE);
             mVerticalGridLayout.setVisibility(LinearLayout.VISIBLE);
         }
