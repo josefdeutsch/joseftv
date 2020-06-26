@@ -17,17 +17,13 @@
 package com.example.android.tvleanback.ui;
 
 import androidx.fragment.app.FragmentTransaction;
-
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.Toast;
-
 import androidx.fragment.app.FragmentManager;
-
 import com.example.android.tvleanback.R;
 import com.example.android.tvleanback.net.LoginActivity;
 import com.google.android.gms.auth.api.Auth;
@@ -36,20 +32,13 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.SignInButton;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
-
-/*
- * VerticalGridActivity that loads VerticalGridFragment
- */
 
 public class VerticalGridActivity extends LoginActivity implements  View.OnClickListener {
+
     /**
      * Called when the activity is first created.
      */
+
     private FrameLayout mVerticalGridLayout;
     private SignInButton mSignInButton;
     private String userId;
@@ -60,8 +49,10 @@ public class VerticalGridActivity extends LoginActivity implements  View.OnClick
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.vertical_grid);
-     //   getWindow().setBackgroundDrawableResource(R.drawable.grid_bg);
 
+        //getWindow().setBackgroundDrawableResource(R.drawable.grid_bg);
+        //ViewGroup root = (ViewGroup) findViewById(android.R.id.content);
+        //mProgressBarManager.setRootView(root);
 
         getWindow().setBackgroundDrawableResource(R.color.default_background);
 
@@ -71,7 +62,7 @@ public class VerticalGridActivity extends LoginActivity implements  View.OnClick
 
         GoogleSignInOptions gso = setupGoogleSignInOptions();
         buildGoogleApiClient(gso);
-        setupFirebaseAuth();
+       // setupFirebaseAuth();
 
         mVerticalGridLayout = (FrameLayout)findViewById(R.id.vertical_grid_fragment);
         mVerticalGridLayout.setVisibility(LinearLayout.GONE);
@@ -93,22 +84,23 @@ public class VerticalGridActivity extends LoginActivity implements  View.OnClick
     @Override
     public void onResume() {
         super.onResume();
-        mAuth.addAuthStateListener(mAuthListener);
+        if(mAuthListener!=null) mAuth.addAuthStateListener(mAuthListener);
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        if (mAuthListener != null) {
-            mAuth.removeAuthStateListener(mAuthListener);
-        }
+        if (mAuthListener != null) mAuth.removeAuthStateListener(mAuthListener);
+
     }
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == RC_SIGN_IN) {
+            showProgressingView();
             GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
+
             if (result.isSuccess()) {
                 GoogleSignInAccount account = result.getSignInAccount();
                 firebaseAuthWithGoogle(account);

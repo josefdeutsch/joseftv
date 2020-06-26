@@ -23,13 +23,8 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.FrameLayout;
-import android.widget.Toast;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.leanback.app.VideoFragment;
-import androidx.leanback.app.VideoFragmentGlueHost;
 import androidx.leanback.app.VideoSupportFragment;
 import androidx.leanback.app.VideoSupportFragmentGlueHost;
 import androidx.leanback.media.PlaybackGlue;
@@ -48,7 +43,6 @@ import androidx.core.app.ActivityOptionsCompat;
 import androidx.loader.app.LoaderManager;
 import androidx.loader.content.CursorLoader;
 import androidx.loader.content.Loader;
-
 import com.example.android.tvleanback.R;
 import com.example.android.tvleanback.data.VideoContract;
 import com.example.android.tvleanback.model.Playlist;
@@ -161,9 +155,6 @@ public class PlaybackFragment extends VideoSupportFragment {
         }
     }
 
-    private FrameLayout mPlaybackFragmentLayout;
-
-
     private void initializePlayer() {
         BandwidthMeter bandwidthMeter = new DefaultBandwidthMeter();
         TrackSelection.Factory videoTrackSelectionFactory =
@@ -183,7 +174,6 @@ public class PlaybackFragment extends VideoSupportFragment {
                     for (int i = 0; i < mPlaylist.size() - 1; i++) {
                         mPlaylistActionListener.onPrevious();
                     }
-                    
                 } else {
                     mPlaylistActionListener.onNext();
                 }
@@ -357,15 +347,11 @@ public class PlaybackFragment extends VideoSupportFragment {
 
                 playlist.clear();
                 do {
-
                     Video video = (Video) mVideoCursorMapper.convert(cursor);
-                    // Set the current position to the selected video.
                     if (video.id == mVideo.id) {
                         playlist.setCurrentPosition(playlist.size());
                     }
                     playlist.add(video);
-
-                    // Shared Pref
 
                 } while (cursor.moveToNext());
             } else if (id == RELATED_VIDEOS_LOADER) {

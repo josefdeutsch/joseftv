@@ -20,6 +20,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.os.Handler;
+
 import androidx.leanback.app.VerticalGridSupportFragment;
 import androidx.leanback.widget.CursorObjectAdapter;
 import androidx.leanback.widget.ImageCardView;
@@ -33,9 +34,11 @@ import androidx.core.app.ActivityOptionsCompat;
 import androidx.loader.app.LoaderManager;
 import androidx.loader.content.CursorLoader;
 import androidx.loader.content.Loader;
+
 import android.view.View;
+import android.view.ViewGroup;
+
 import com.example.android.tvleanback.R;
-import com.example.android.tvleanback.data.FetchVideoService;
 import com.example.android.tvleanback.data.VideoContract;
 import com.example.android.tvleanback.model.Video;
 import com.example.android.tvleanback.model.VideoCursorMapper;
@@ -115,6 +118,7 @@ public class VerticalGridFragment extends VerticalGridSupportFragment
     public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
         if (loader.getId() == ALL_VIDEOS_LOADER && cursor != null && cursor.moveToFirst()) {
             mVideoCursorAdapter.changeCursor(cursor);
+
         }
     }
 
@@ -126,7 +130,7 @@ public class VerticalGridFragment extends VerticalGridSupportFragment
     private final class ItemViewClickedListener implements OnItemViewClickedListener {
         @Override
         public void onItemClicked(Presenter.ViewHolder itemViewHolder, Object item,
-                RowPresenter.ViewHolder rowViewHolder, Row row) {
+                                  RowPresenter.ViewHolder rowViewHolder, Row row) {
 
             if (item instanceof Video) {
                 Video video = (Video) item;
@@ -146,7 +150,8 @@ public class VerticalGridFragment extends VerticalGridSupportFragment
     private final class ItemViewSelectedListener implements OnItemViewSelectedListener {
         @Override
         public void onItemSelected(Presenter.ViewHolder itemViewHolder, Object item,
-                RowPresenter.ViewHolder rowViewHolder, Row row) {
+                                   RowPresenter.ViewHolder rowViewHolder, Row row) {
         }
     }
+
 }

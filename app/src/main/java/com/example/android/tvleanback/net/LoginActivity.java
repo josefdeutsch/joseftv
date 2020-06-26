@@ -1,14 +1,14 @@
 package com.example.android.tvleanback.net;
 
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Handler;
 import android.util.Log;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Toast;
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
-
 import com.example.android.tvleanback.R;
 import com.example.android.tvleanback.data.FetchVideoService;
 import com.example.android.tvleanback.ui.LeanbackActivity;
@@ -33,12 +33,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.database.annotations.NotNull;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.ArrayList;
+import androidx.leanback.app.ProgressBarManager;
 
 public class LoginActivity extends LeanbackActivity
         implements GoogleApiClient.OnConnectionFailedListener {
@@ -49,6 +44,7 @@ public class LoginActivity extends LeanbackActivity
     public FirebaseAuth.AuthStateListener mAuthListener;
     public GoogleApiClient mGoogleApiClient;
     private static final String TAG = "LoginActivity";
+    public final ProgressBarManager mProgressBarManager = new ProgressBarManager();
 
     public void setupFirebaseAuth() {
 
@@ -57,6 +53,7 @@ public class LoginActivity extends LeanbackActivity
         mAuthListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                //showProgressingView();
                 FirebaseUser user = firebaseAuth.getCurrentUser();
                 if (user != null) {
                     Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
@@ -70,6 +67,8 @@ public class LoginActivity extends LeanbackActivity
                             Intent serviceIntent = new Intent(getApplicationContext(), FetchVideoService.class);
                             serviceIntent.putExtra("data",value);
                             getApplication().startService(serviceIntent);
+                            //updateUI(user);
+                            //hideProgressingView();
                         }
                         @Override
                         public void onCancelled(DatabaseError error) {
@@ -80,7 +79,7 @@ public class LoginActivity extends LeanbackActivity
                 } else {
                     Log.d(TAG, "onAuthStateChanged:signed_out");
                 }
-                updateUI(user);
+             //  updateUI(user);
             }
         };
     }
@@ -102,27 +101,22 @@ public class LoginActivity extends LeanbackActivity
 
     public void firebaseAuthWithGoogle(final GoogleSignInAccount acct) {
 
-        Log.d(TAG, "firebaseAuthWithGoogle:" + acct.getId());
-
-        //use alertDialog...
-        //showProgressDialog(this);
-
         final AuthCredential credential = GoogleAuthProvider.getCredential(acct.getIdToken(), null);
+        setupFirebaseAuth();
         mAuth.signInWithCredential(credential).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
-                Log.d(TAG, "signInWithCredential:onComplete:" + task.isSuccessful());
                 if (task.isSuccessful()) {
-
                     FirebaseUser user = mAuth.getCurrentUser();
-                    updateUI(user);
-
+                    new Handler().postDelayed(new Runnable() {
+                        public void run() {
+                            updateUI(user);
+                            hideProgressingView();
+                        }
+                    }, 2000);
                 } else {
 
                 }
-
-                //hideProgressDialog();
-
             }
         });
     }
@@ -175,24 +169,24 @@ public class LoginActivity extends LeanbackActivity
         Toast.makeText(this, "Google Play Services error.", Toast.LENGTH_SHORT).show();
     }
 
-    public void showProgressDialog(Context context) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setCancelable(false);
-        builder.setView(R.layout.progressdialog);
-        mDialog = builder.create();
-        mDialog.show();
-    }
+    ViewGroup progressView;
+    protected boolean isProgressShowing = false;
 
-    public void hideProgressDialog() {
-        if (mDialog != null && mDialog.isShowing()) {
-            mDialog.hide();
-            mDialog.dismiss();
+    public void showProgressingView() {
+
+        if (!isProgressShowing) {
+            isProgressShowing = true;
+            progressView = (ViewGroup) getLayoutInflater().inflate(R.layout.progressbar_layout, null);
+            View v = this.findViewById(android.R.id.content).getRootView();
+            ViewGroup viewGroup = (ViewGroup) v;
+            viewGroup.addView(progressView);
         }
     }
 
-    @Override
-    public void onStop() {
-        super.onStop();
-        hideProgressDialog();
+    public void hideProgressingView() {
+        View v = this.findViewById(android.R.id.content).getRootView();
+        ViewGroup viewGroup = (ViewGroup) v;
+        viewGroup.removeView(progressView);
+        isProgressShowing = false;
     }
 }
