@@ -12,7 +12,7 @@ Rather than thinking of digital art in abstract terms, i think its time to accep
 ## What have I learned?
 In this project you will:
 * AndroidTV Leanback Framework
-* Firebase
+* Firebase Database, Google Authentication
 
 ## Libraries
 - [Gilde](http://square.github.io/retrofit/) 
