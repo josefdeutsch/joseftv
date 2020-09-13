@@ -11,25 +11,14 @@ Rather than thinking of digital art in abstract terms, i think its time to accep
 
 ## What have I learned?
 In this project you will:
-* Firebase with Google Auth.
-* Usage of Workermanager KEEP.Policy
-* Google Cloud Endpoints provided with Gradle
-* Test UI Components with AndroidX- Testing- Framework
+* AndroidTV Leanback Framework
+* Firebase
 
 ## Libraries
-- [Android Architecture Components](https://developer.android.com/topic/libraries/architecture/) 
-    * [Room](https://developer.android.com/topic/libraries/architecture/room)
-    * [ViewModel](https://developer.android.com/topic/libraries/architecture/viewmodel)
-    * [LiveData](https://developer.android.com/topic/libraries/architecture/livedata)
-    * [Workermanager](https://developer.android.com/topic/libraries/architecture/workermanager)
-    * [Espresso](https://developer.android.com/topic/libraries/architecture/espresso)
-    * [ExoPlayer](https://developer.android.com/topic/libraries/architecture/activity)
-    * [Mockito](https://developer.android.com/topic/libraries/architecture/activity)
-    * [ActivityScenario](https://developer.android.com/topic/libraries/architecture/activity)
-    * [FragmentScenario](https://developer.android.com/topic/libraries/architecture/fragment)
-     
-- [OkHttp](http://square.github.io/retrofit/) 
-- [Picasso](http://square.github.io/picasso/)
+- [Gilde](http://square.github.io/retrofit/) 
+- [Exoplayer](http://square.github.io/picasso/)
+- [Gson](http://square.github.io/picasso/)
+
 <br />
 <br />
 <br />
