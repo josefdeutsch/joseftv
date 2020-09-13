@@ -13,15 +13,6 @@ What exactly is digital space and how does it show itself?
 The way to reinterpret an exhibition space captivates me and has motivated me so much to implement and complete joseph according to my ideas.
 In the end, Joseph itself became a work of art and the metaphor: “The expression wanders through space” is the message that emanates from the heart of the matter.
 
-## What have I learned?
-In this project you will:
-* AndroidTV Leanback Framework
-* Firebase Database, Google Authentication
-
-## Libraries
-- [Gilde](http://square.github.io/retrofit/) 
-- [Exoplayer](http://square.github.io/picasso/)
-- [Gson](http://square.github.io/picasso/)
 
 <br />
 <br />
@@ -37,6 +28,18 @@ In this project you will:
 <br />
 <br />
 <br />
+
+
+## What have I learned?
+In this project you will:
+* AndroidTV Leanback Framework
+* Firebase Database, Google Authentication
+
+## Libraries
+- [Gilde](http://square.github.io/retrofit/) 
+- [Exoplayer](http://square.github.io/picasso/)
+- [Gson](http://square.github.io/picasso/)
+
 
 
 ## License
