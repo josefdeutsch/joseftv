@@ -38,10 +38,10 @@
 
     <application
         android:allowBackup="false"
-        android:banner="@drawable/movie"
+        android:banner="@drawable/ic_webdesignsvg_02"
         android:icon="@drawable/app_icon_quantum"
         android:label="@string/app_name"
-        android:logo="@drawable/movie"
+        android:logo="@drawable/ic_webdesignsvg_02"
         android:theme="@style/Theme.Leanback"
         tools:ignore="GoogleAppIndexingWarning">
 

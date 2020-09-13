@@ -24,23 +24,19 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.drawable.AnimationDrawable;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import androidx.annotation.Nullable;
 import androidx.leanback.app.OnboardingSupportFragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-
 import com.example.android.tvleanback.R;
-
 import java.util.ArrayList;
 
 public class OnboardingFragment extends OnboardingSupportFragment {
+
     public static final String COMPLETED_ONBOARDING = "completed_onboarding";
 
     private static final int[] pageTitles = {
@@ -134,6 +130,7 @@ public class OnboardingFragment extends OnboardingSupportFragment {
         if (mContentAnimator != null) {
             mContentAnimator.end();
         }
+
         ArrayList<Animator> animators = new ArrayList<>();
         Animator fadeOut = createFadeOutAnimator(mContentView);
 
@@ -144,12 +141,14 @@ public class OnboardingFragment extends OnboardingSupportFragment {
                 ((AnimationDrawable) mContentView.getDrawable()).start();
             }
         });
+
         animators.add(fadeOut);
         animators.add(createFadeInAnimator(mContentView));
         AnimatorSet set = new AnimatorSet();
         set.playSequentially(animators);
         set.start();
         mContentAnimator = set;
+
     }
 
     @Override

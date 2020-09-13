@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
      Copyright (c) 2016 The Android Open Source Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
@@ -20,9 +19,8 @@
     <color name="fastlane_background">#FF3333</color>
     <color name="search_opaque">#ffaa3f</color>
     <color name="selected_background">#FF3333</color>
-
+    <color name="black">#FF000000</color>
     <color name="icon_background">#4A4F51</color>
     <color name="icon_alt_background">#0020FC</color>
-
     <color name="default_background">#3d3d3d</color>
 </resources>
