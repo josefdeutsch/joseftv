@@ -30,16 +30,15 @@ In this project you will:
      
 - [OkHttp](http://square.github.io/retrofit/) 
 - [Picasso](http://square.github.io/picasso/)
-
 <br />
 <br />
 <br />
 <br />
 <p align="center">
-<img src="https://github.com/josefdeutsch/josef/blob/master/app/src/main/res/img/loginTV.gif" width="400"/>
-<img src="https://github.com/josefdeutsch/josef/blob/master/app/src/main/res/img/main.gif" width="400"/>
-<img src="https://github.com/josefdeutsch/josef/blob/master/app/src/main/res/img/presenter.gif" width="400"/>
-<img src="https://github.com/josefdeutsch/josef/blob/master/app/src/main/res/img/video.gif" width="400"/>
+<img src="https://github.com/josefdeutsch/joseftv/blob/master/app/src/main/res/img/loginTV.gif" width="400"/>
+<img src="https://github.com/josefdeutsch/joseftv/blob/master/app/src/main/res/img/main.gif" width="400"/>
+<img src="https://github.com/josefdeutsch/joseftv/blob/master/app/src/main/res/img/presenter.gif" width="400"/>
+<img src="https://github.com/josefdeutsch/joseftv/blob/master/app/src/main/res/img/video.gif" width="400"/>
 </p>
 <br />
 <br />
