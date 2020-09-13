@@ -2,12 +2,16 @@
 # JosephTV - Digital art is true.
 
 ## Project Overview
-Joseph is an Artproject consiting of two separete applications, josephMobile and josephTV.
-Its goal is to provide my digital artworks to television.
+Joseph - “an app for providing art on smart TV”
+The task was to give users an interactive selection of digital works of art in the form of videos
+which can then be combined to a movie on SMART TV.
 
 ## Why this Project?
-Ive made this project because i was looking for alternative ways to present my digital artworks. 
-Rather than thinking of digital art in abstract terms, i think its time to accept it as a true entity.
+I developed Joseph because I was looking for alternative ways to present my art.
+During my work I was confronted more and more with the idea of digital space.
+What exactly is digital space and how does it show itself?
+The way to reinterpret an exhibition space captivates me and has motivated me so much to implement and complete joseph according to my ideas.
+In the end, Joseph itself became a work of art and the metaphor: “The expression wanders through space” is the message that emanates from the heart of the matter.
 
 ## What have I learned?
 In this project you will:
