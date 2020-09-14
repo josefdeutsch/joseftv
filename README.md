@@ -30,8 +30,8 @@ In the end, Joseph itself became a work of art and the metaphor: “The expressi
 <br />
 
 ## JosephTV
-Figure one shows Google Authentication followed by a Firebase database query. Data are confirmed and made available to the user in a grid view.
-If the user clicks on one of the selected tiles in figure two, he gets to another control element figure three, which should create space for information. At the bottom of this element there is a possible selection from the already existing playlists. Figure four shows the video player with its operating dynamics and the task flow, which commands you back to the detailed selection when you select a video.
+Figure one shows Google Authentication followed by a Firebase database query. After logging in, the data is confirmed and made available to the user in a grid view.
+If the user clicks one of the selected tiles in figure two, he gets to another control element figure three, which should create space for more specific information. At the bottom of this element there is a possible selection from the already existing playlists. Figure four shows the video player with its operating dynamics and the task flow, which commands you back to the detailed selection when a video is selected.
 
 
 ## What have I learned?
