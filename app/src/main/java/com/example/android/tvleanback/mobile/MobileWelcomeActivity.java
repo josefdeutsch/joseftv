@@ -16,9 +16,12 @@
 package com.example.android.tvleanback.mobile;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 
 import com.example.android.tvleanback.R;
+import com.example.android.tvleanback.ui.AuthenticationActivity;
+import com.example.android.tvleanback.ui.SettingsActivity;
 
 public class MobileWelcomeActivity extends Activity {
 
@@ -26,5 +29,6 @@ public class MobileWelcomeActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mobile_welcome);
+        startActivity(new Intent(this, AuthenticationActivity.class));
     }
 }

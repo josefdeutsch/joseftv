@@ -76,6 +76,8 @@ public class VerticalGridActivity extends LoginActivity implements  View.OnClick
         fragmentTransaction.replace(R.id.vertical_grid_fragment, new VerticalGridFragment());
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
+
+
     }
     @Override
     public void onClick(View view) {
@@ -126,6 +128,7 @@ public class VerticalGridActivity extends LoginActivity implements  View.OnClick
 
     @Override
     public void onBackPressed(){
-        this.finish();
+        startActivity(new Intent(this, AuthenticationActivity.class));
+        this.finishAfterTransition();
     }
 }

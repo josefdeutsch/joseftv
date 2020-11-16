@@ -26,7 +26,7 @@ public class CustomTitleView extends RelativeLayout implements TitleViewAdapter.
 
         @Override
         public void setBadgeDrawable(Drawable drawable) {
-            //CustomTitleView.this.setBadgeDrawable(drawable);
+            CustomTitleView.this.setBadgeDrawable(drawable);
         }
 
         @Override
@@ -42,6 +42,7 @@ public class CustomTitleView extends RelativeLayout implements TitleViewAdapter.
             if (visible) {
                 mTitleView.setVisibility(View.VISIBLE);
             } else {
+
                 mTitleView.setVisibility(View.GONE);
             }
         }

@@ -58,16 +58,10 @@ public class VerticalGridFragment extends VerticalGridSupportFragment
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         mVideoCursorAdapter.setMapper(new VideoCursorMapper());
         setAdapter(mVideoCursorAdapter);
 
         setTitle("Digital art is true.");
-
-        //CustomTitleView titleView = new CustomTitleView(getActivity());
-        //titleView.setTitle("hello");
-
-        //setTitleView(titleView);
 
         if (savedInstanceState == null) {
             prepareEntranceTransition();

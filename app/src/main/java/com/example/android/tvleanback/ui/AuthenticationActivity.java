@@ -19,11 +19,13 @@ package com.example.android.tvleanback.ui;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+
 import androidx.annotation.NonNull;
 import androidx.fragment.app.FragmentActivity;
 import androidx.leanback.app.GuidedStepSupportFragment;
 import androidx.leanback.widget.GuidanceStylist;
 import androidx.leanback.widget.GuidedAction;
+
 import android.text.InputType;
 import android.widget.Toast;
 
@@ -33,6 +35,9 @@ import java.util.List;
 
 public class AuthenticationActivity extends FragmentActivity {
     private static final int CONTINUE = 2;
+    private static final int CONTINUE1 = 3;
+    private static final int CONTINUE2 = 4;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,12 +60,14 @@ public class AuthenticationActivity extends FragmentActivity {
         public GuidanceStylist.Guidance onCreateGuidance(@NonNull Bundle savedInstanceState) {
             String title = getString(R.string.pref_title_screen_signin);
             String description = getString(R.string.pref_title_login_description);
-            Drawable icon = getActivity().getDrawable(R.drawable.ic_main_icon);
+            Drawable icon = getActivity().getDrawable(R.drawable.ic_webdesignsvg_02);
             return new GuidanceStylist.Guidance(title, description, "", icon);
         }
 
         @Override
         public void onCreateActions(@NonNull List<GuidedAction> actions, Bundle savedInstanceState) {
+            //getFragmentManager().beginTransaction().add(android.R.id.content, BrowseErrorFragment.class).commit();
+
             GuidedAction enterUsername = new GuidedAction.Builder(getContext())
                     .title(getString(R.string.pref_title_username))
                     .descriptionEditable(true)
@@ -73,13 +80,23 @@ public class AuthenticationActivity extends FragmentActivity {
 
             GuidedAction login = new GuidedAction.Builder(getContext())
                     .id(CONTINUE)
-                    .title(getString(R.string.guidedstep_continue))
+                    .title(getString(R.string.guidedstep_email))
+                    .build();
+            GuidedAction google = new GuidedAction.Builder(getContext())
+                    .id(CONTINUE1)
+                    .title(getString(R.string.guidedstep_google))
+                    .build();
+            GuidedAction facebook = new GuidedAction.Builder(getContext())
+                    .id(CONTINUE2)
+                    .title(getString(R.string.guidedstep_facebook))
                     .build();
 
 
             actions.add(enterUsername);
             actions.add(enterPassword);
             actions.add(login);
+            actions.add(google);
+            actions.add(facebook);
 
 
         }
@@ -90,7 +107,7 @@ public class AuthenticationActivity extends FragmentActivity {
                 // TODO Authenticate your account
                 // Assume the user was logged in
                 Toast.makeText(getActivity(), "Welcome!", Toast.LENGTH_SHORT).show();
-                startActivity(new Intent(getContext(),VerticalGridActivity.class));
+                startActivity(new Intent(getContext(), VerticalGridActivity.class));
                 getActivity().finishAfterTransition();
             }
         }

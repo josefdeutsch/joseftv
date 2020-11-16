@@ -128,6 +128,9 @@
 
 
     <string name="SMALL">{"googlevideos":[{"category":"Google+","videos":[{"description":"Jon introduces Instant Upload with a few thoughts on how we remember the things that matter. Check out some ways we've been rethinking real-life sharing for the web at plus.google.com","sources":["https://storage.googleapis.com/android-tv/Sample%20videos/Google%2B/Google%2B_%20Instant%20Upload.mp4"],"card":"https://storage.googleapis.com/android-tv/Sample%20videos/Google%2B/Google%2B_%20Instant%20Upload/card.jpg","background":"https://storage.googleapis.com/android-tv/Sample%20videos/Google%2B/Google%2B_%20Instant%20Upload/bg.jpg","title":"Instant Upload","studio":"Google+"}]}]}</string>
+    <string name="guidedstep_email">LOGIN WITH EMAIL</string>
+    <string name="guidedstep_google">LOGIN WITH GOOGLE</string>
+    <string name="guidedstep_facebook">LOGIN WITH FACEBOOK</string>
 
 
 </resources>
