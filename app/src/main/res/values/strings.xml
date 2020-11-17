@@ -131,6 +131,7 @@
     <string name="guidedstep_email">LOGIN WITH EMAIL</string>
     <string name="guidedstep_google">LOGIN WITH GOOGLE</string>
     <string name="guidedstep_facebook">LOGIN WITH FACEBOOK</string>
+    <string name="guidedstep_login">Login</string>
 
 
 </resources>

@@ -34,7 +34,10 @@
         <item name="android:padding">24dp</item>
     </style>
 
-    <style name="Theme.Example.Leanback.GuidedStep" parent="Theme.Leanback.GuidedStep">
+    <style name="Theme.Example.Leanback.GuidedStep" parent="Theme.Leanback.GuidedStep"
+
+
+        >
         <item name="guidanceIconStyle">@style/Widget.Example.Leanback.GuidanceIconStyle</item>
     </style>
 

@@ -119,24 +119,14 @@ public class AuthenticationActivity extends FragmentActivity {
 
             GuidedAction login = new GuidedAction.Builder(getContext())
                     .id(CONTINUE)
-                    .title(getString(R.string.guidedstep_email))
+                    .title(getString(R.string.guidedstep_login))
                     .build();
-            GuidedAction google = new GuidedAction.Builder(getContext())
-                    .id(CONTINUE1)
-                    .title(getString(R.string.guidedstep_google))
-                    .build();
-            GuidedAction facebook = new GuidedAction.Builder(getContext())
-                    .id(CONTINUE2)
-                    .title(getString(R.string.guidedstep_facebook))
-                    .build();
+
 
 
             actions.add(enterUsername);
             actions.add(enterPassword);
             actions.add(login);
-            //  actions.add(google);
-            //  actions.add(facebook);
-
 
         }
 
@@ -184,7 +174,6 @@ public class AuthenticationActivity extends FragmentActivity {
 
     private final BroadcastReceiver networkReceiver = new BroadcastReceiver() {
 
-        private final User user = new User();
 
         @Override
         public void onReceive(final Context context, final Intent intent) {
@@ -193,9 +182,6 @@ public class AuthenticationActivity extends FragmentActivity {
 
             Log.d(TAG, "onReceive: "+email);
             Log.d(TAG, "onReceive: "+password);
-
-           // user.rememberInput(email,password);
-
 
         }
 

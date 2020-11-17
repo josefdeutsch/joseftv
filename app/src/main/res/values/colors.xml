@@ -20,7 +20,7 @@
     <color name="search_opaque">#ffaa3f</color>
     <color name="selected_background">#FF3333</color>
     <color name="black">#FF000000</color>
-    <color name="icon_background">#4A4F51</color>
-    <color name="icon_alt_background">#3D3D3D</color>
-    <color name="default_background">#3d3d3d</color>
+    <color name="icon_background">#303030</color>
+    <color name="icon_alt_background">#303030</color>
+    <color name="default_background">#303030</color>
 </resources>
