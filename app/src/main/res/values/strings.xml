@@ -132,6 +132,7 @@
     <string name="guidedstep_google">LOGIN WITH GOOGLE</string>
     <string name="guidedstep_facebook">LOGIN WITH FACEBOOK</string>
     <string name="guidedstep_login">Login</string>
+    <string name="guidedstep_logout">Logout</string>
 
 
 </resources>

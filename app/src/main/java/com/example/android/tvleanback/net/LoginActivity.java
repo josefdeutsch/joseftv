@@ -49,39 +49,7 @@ public class LoginActivity extends LeanbackActivity
     public void setupFirebaseAuth() {
 
         FirebaseApp.initializeApp(this);
-        mAuth = FirebaseAuth.getInstance();
-        mAuthListener = new FirebaseAuth.AuthStateListener() {
-            @Override
-            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                //showProgressingView();
-                FirebaseUser user = firebaseAuth.getCurrentUser();
-                if (user != null) {
-                    Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
-                    FirebaseDatabase database = FirebaseDatabase.getInstance();//
-                    DatabaseReference myRef = database.getReference("users").child(user.getUid());
-                    myRef.addValueEventListener(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(DataSnapshot dataSnapshot) {
-                            String value = dataSnapshot.child("png").getValue().toString();
-                            Log.d(TAG, "onDataChange: "+value);
-                            Intent serviceIntent = new Intent(getApplicationContext(), FetchVideoService.class);
-                            serviceIntent.putExtra("data",value);
-                            getApplication().startService(serviceIntent);
-                            //updateUI(user);
-                            //hideProgressingView();
-                        }
-                        @Override
-                        public void onCancelled(DatabaseError error) {
-                            // Failed to read value
-                            Log.w(TAG, "Failed to read value.", error.toException());
-                        }
-                    });
-                } else {
-                    Log.d(TAG, "onAuthStateChanged:signed_out");
-                }
-             //  updateUI(user);
-            }
-        };
+       // mAuth = FirebaseAuth.getInstance();
     }
 
     public void buildGoogleApiClient(GoogleSignInOptions gso) {
