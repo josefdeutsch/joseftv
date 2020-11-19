@@ -25,6 +25,7 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
+
 import androidx.leanback.app.BackgroundManager;
 import androidx.leanback.app.DetailsSupportFragment;
 import androidx.leanback.widget.Action;
@@ -50,6 +51,7 @@ import androidx.loader.app.LoaderManager;
 import androidx.core.content.ContextCompat;
 import androidx.loader.content.CursorLoader;
 import androidx.loader.content.Loader;
+
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -183,12 +185,15 @@ public class VideoDetailsFragment extends DetailsSupportFragment
 
     private void setupAdapter() {
         // Set detail background and style.
-        FullWidthDetailsOverviewRowPresenter detailsPresenter =
-                new FullWidthDetailsOverviewRowPresenter(new DetailsDescriptionPresenter(),
-                        new MovieDetailsOverviewLogoPresenter());
+        DetailsDescriptionPresenter detailsdescriptionPresenter = new DetailsDescriptionPresenter();
 
-        detailsPresenter.setBackgroundColor(
-                ContextCompat.getColor(getActivity(), R.color.black));
+        MovieDetailsOverviewLogoPresenter movieDetailsOverviewLogoPresenter = new MovieDetailsOverviewLogoPresenter();
+        FullWidthDetailsOverviewRowPresenter detailsPresenter = new FullWidthDetailsOverviewRowPresenter(detailsdescriptionPresenter, movieDetailsOverviewLogoPresenter);
+
+        detailsPresenter.setBackgroundColor(getContext().getResources().getColor(R.color.black));
+        detailsPresenter.setActionsBackgroundColor(getContext().getResources().getColor(R.color.fastlane_background));
+        //  detailsPresenter.setBackgroundColor(
+        //    ContextCompat.getColor(getActivity(), R.color.black));
         detailsPresenter.setInitialState(FullWidthDetailsOverviewRowPresenter.STATE_HALF);
 
         // Hook up transition element.
@@ -343,14 +348,13 @@ public class VideoDetailsFragment extends DetailsSupportFragment
                 });
 
         SparseArrayObjectAdapter adapter = new SparseArrayObjectAdapter();
-
         adapter.set(ACTION_WATCH_TRAILER, new Action(ACTION_WATCH_TRAILER, getResources()
                 .getString(R.string.watch_trailer_1),
                 getResources().getString(R.string.watch_trailer_2)));
-      /**  adapter.set(ACTION_RENT, new Action(ACTION_RENT, getResources().getString(R.string.rent_1),
-                getResources().getString(R.string.rent_2)));
-        adapter.set(ACTION_BUY, new Action(ACTION_BUY, getResources().getString(R.string.buy_1),
-                getResources().getString(R.string.buy_2)));**/
+        /**  adapter.set(ACTION_RENT, new Action(ACTION_RENT, getResources().getString(R.string.rent_1),
+         getResources().getString(R.string.rent_2)));
+         adapter.set(ACTION_BUY, new Action(ACTION_BUY, getResources().getString(R.string.buy_1),
+         getResources().getString(R.string.buy_2)));**/
         row.setActionsAdapter(adapter);
 
         mAdapter.add(row);
@@ -373,7 +377,7 @@ public class VideoDetailsFragment extends DetailsSupportFragment
     private final class ItemViewClickedListener implements OnItemViewClickedListener {
         @Override
         public void onItemClicked(Presenter.ViewHolder itemViewHolder, Object item,
-                RowPresenter.ViewHolder rowViewHolder, Row row) {
+                                  RowPresenter.ViewHolder rowViewHolder, Row row) {
 
             if (item instanceof Video) {
                 Video video = (Video) item;

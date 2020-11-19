@@ -88,8 +88,6 @@ public class AuthenticationActivity extends FragmentActivity {
                     FirebaseDatabase database = FirebaseDatabase.getInstance();//
                     DatabaseReference myRef = database.getReference("users").child(user.getUid());
                     myRef.addValueEventListener(new ValueEventListener() {
-
-
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
                             String value = dataSnapshot.child("png").getValue().toString();
@@ -113,10 +111,8 @@ public class AuthenticationActivity extends FragmentActivity {
         if (null == savedInstanceState) {
             GuidedStepSupportFragment.addAsRoot(this, new FirstStepFragment(), android.R.id.content);
         }
-        IntentFilter filter = new IntentFilter("com.yourcompany.testIntent");
 
 
-        this.registerReceiver(networkReceiver, filter);
 
     }
 
@@ -136,7 +132,6 @@ public class AuthenticationActivity extends FragmentActivity {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        this.unregisterReceiver(networkReceiver);
     }
 
     public static class FirstStepFragment extends GuidedStepSupportFragment {
@@ -200,10 +195,6 @@ public class AuthenticationActivity extends FragmentActivity {
         @Override
         public void onGuidedActionClicked(GuidedAction action) {
             if (action.getId() == CONTINUE) {
-                Log.d(TAG, "onGuidedActionClicked: " + action.toString());
-                Log.d(TAG, "onGuidedActionClicked: " + email);
-                Log.d(TAG, "onGuidedActionClicked: " + password);
-
                 if (email != null && password != null) {
                     mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                         @Override
@@ -223,17 +214,9 @@ public class AuthenticationActivity extends FragmentActivity {
             }
             if (action.getId() == EMAIL) {
                 email = getString(action.toString().replaceAll("\\s+", ""),8);
-                //Username
-                //email = "officeschauboes@gmail.com";
-                // Log.d(TAG, "onGuidedActionClicked: "+validateEmail(action.toString().trim()));
-                // Intent intent = new Intent("com.yourcompany.testIntent");
-                // intent.putExtra("email", email);
-                // getContext().sendBroadcast(intent);
             }
             if (action.getId() == PASSWORD) {
                 password = getString(action.toString().replaceAll("\\s+", ""),8);
-               // Password
-                // password = "Hurehure123";
                 Intent intent = new Intent("com.yourcompany.testIntent");
                 intent.putExtra("password", password);
                 getContext().sendBroadcast(intent);
@@ -258,16 +241,4 @@ public class AuthenticationActivity extends FragmentActivity {
         super.onActivityResult(requestCode, resultCode, data);
     }
 
-    private final BroadcastReceiver networkReceiver = new BroadcastReceiver() {
-
-        @Override
-        public void onReceive(final Context context, final Intent intent) {
-            String email = intent.getExtras().getString("email");
-            String password = intent.getExtras().getString("password");
-
-            Log.d(TAG, "onReceive: " + email);
-            Log.d(TAG, "onReceive: " + password);
-
-        }
-    };
 }

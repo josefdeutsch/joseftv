@@ -16,20 +16,33 @@
 
 package com.example.android.tvleanback.presenter;
 
-import androidx.leanback.widget.AbstractDetailsDescriptionPresenter;
+import android.content.res.Resources;
+import android.text.TextUtils;
+import android.util.Log;
+import android.view.View;
 
+import androidx.leanback.widget.AbstractDetailsDescriptionPresenter;
+import androidx.leanback.widget.Presenter;
+
+import com.example.android.tvleanback.R;
 import com.example.android.tvleanback.model.Video;
+
+import static android.content.ContentValues.TAG;
 
 public class DetailsDescriptionPresenter extends AbstractDetailsDescriptionPresenter {
 
     @Override
     protected void onBindDescription(ViewHolder viewHolder, Object item) {
         Video video = (Video) item;
-
         if (video != null) {
             viewHolder.getTitle().setText(video.title);
             viewHolder.getSubtitle().setText(video.studio);
-            viewHolder.getBody().setText(video.description);
+            ///video.description
+            viewHolder.getBody().setText(R.string.details_description_full);
         }
+        Log.d(TAG, "onBindDescription: "+ viewHolder.getBody().getText().toString());
     }
+
+
+
 }
