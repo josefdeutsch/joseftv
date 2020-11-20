@@ -20,6 +20,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 
@@ -39,6 +40,7 @@ import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.AuthResult;
@@ -69,8 +71,7 @@ public class AuthenticationActivity extends FragmentActivity {
 
     public static FirebaseAuth mAuth;
     public FirebaseAuth.AuthStateListener mAuthListener;
-    public static String email;
-    public static String password;
+    private final IntentFilter filter = new IntentFilter("com.josef.tv.filter");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -113,25 +114,75 @@ public class AuthenticationActivity extends FragmentActivity {
         }
 
 
+        filter.addAction("com.josef.tv.auth.email");
+        filter.addAction("com.josef.tv.auth.password");
+        filter.addAction("com.josef.tv.auth.onCompleteListener");
+        filter.addAction("com.josef.tv.auth.onFailureListener");
+
 
     }
+
+    private final BroadcastReceiver networkReceiver = new BroadcastReceiver() {
+
+        @Override
+        public void onReceive(final Context context, final Intent intent) {
+
+            if (intent.getAction().equals("com.josef.tv.auth.email")) {
+
+                SharedPreferences prefs = context.getSharedPreferences("com.josef.tv.prefs.main", Context.MODE_PRIVATE);
+                prefs.edit().putString("com.josef.tv.auth.email", intent.getExtras().getString("com.josef.tv.auth.email.key")).apply();
+                String email = context.getSharedPreferences("com.josef.tv.prefs.main", Context.MODE_PRIVATE).getString("com.josef.tv.auth.email", "default");
+                Toast.makeText(context, email, Toast.LENGTH_SHORT).show();
+
+            } else if (intent.getAction().equals("com.josef.tv.auth.password")) {
+
+                SharedPreferences prefs = context.getSharedPreferences("com.josef.tv.prefs.main", Context.MODE_PRIVATE);
+                prefs.edit().putString("com.josef.tv.auth.password", intent.getExtras().getString("com.josef.tv.auth.password.key")).apply();
+                String password = context.getSharedPreferences("com.josef.tv.prefs.main", Context.MODE_PRIVATE).getString("com.josef.tv.auth.password", "default");
+                Toast.makeText(context, password, Toast.LENGTH_SHORT).show();
+
+            } else if (intent.getAction().equals("com.josef.tv.auth.onCompleteListener")) {
+
+                SharedPreferences prefs = context.getSharedPreferences("com.josef.tv.prefs.main", Context.MODE_PRIVATE);
+                prefs.edit().putString("com.josef.tv.auth.onCompleteListener", intent.getExtras().getString("com.josef.tv.auth.onCompleteListener.key")).apply();
+                Toast.makeText(context, "Success!", Toast.LENGTH_SHORT).show();
+
+            } else if (intent.getAction().equals("com.josef.tv.auth.onFailureListener")) {
+
+                SharedPreferences prefs = context.getSharedPreferences("com.josef.tv.prefs.main", Context.MODE_PRIVATE);
+                prefs.edit().putString("com.josef.tv.auth.onFailureListener", intent.getExtras().getString("com.josef.tv.auth.onFailureListener.key")).apply();
+                Toast.makeText(context, intent.getExtras().getString("com.josef.tv.auth.onFailureListener.key"), Toast.LENGTH_SHORT).show();
+
+            }
+
+        }
+    };
 
     @Override
     public void onStart() {
         super.onStart();
         mAuth.addAuthStateListener(mAuthListener);
+        this.registerReceiver(networkReceiver, filter);
     }
 
     @Override
     public void onStop() {
         super.onStop();
         mAuth.removeAuthStateListener(mAuthListener);
-
+        this.unregisterReceiver(networkReceiver);
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
+        Log.d(TAG, "onDestroy: ");
+
+        SharedPreferences prefs = this.getSharedPreferences("com.josef.tv.prefs.main", Context.MODE_PRIVATE);
+        prefs.edit().putString("com.josef.tv.auth.email", "default").apply();
+        prefs.edit().putString("com.josef.tv.auth.password", "default").apply();
+        prefs.edit().putString("com.josef.tv.auth.onCompleteListener", "default").apply();
+        prefs.edit().putString("com.josef.tv.auth.onFailureListener", "default").apply();
+
     }
 
     public static class FirstStepFragment extends GuidedStepSupportFragment {
@@ -155,8 +206,7 @@ public class AuthenticationActivity extends FragmentActivity {
 
         @Override
         public void onCreateActions(@NonNull List<GuidedAction> actions, Bundle savedInstanceState) {
-            //getFragmentManager().beginTransaction().add(android.R.id.content, BrowseErrorFragment.class).commit();
-            // GuidedActionEditText guidedActionEditText = new GuidedActionEditText(getActivity());
+
 
             GuidedAction enterUsername = new GuidedAction.Builder(getContext())
                     .id(EMAIL)
@@ -195,30 +245,46 @@ public class AuthenticationActivity extends FragmentActivity {
         @Override
         public void onGuidedActionClicked(GuidedAction action) {
             if (action.getId() == CONTINUE) {
-                if (email != null && password != null) {
-                    mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                        @Override
-                        public void onComplete(@NonNull Task<AuthResult> task) {
-                            if (task.isSuccessful()) {
-                                getContext().startActivity(new Intent(getContext(), VerticalGridActivity.class));
-                                getActivity().finishAfterTransition();
-                                Log.d(TAG, "onComplete: ");
 
-                            } else {
-                                Log.e(TAG, "Error getting sign in methods for user", task.getException());
-                            }
+                String email = getContext().getSharedPreferences("com.josef.tv.prefs.main", Context.MODE_PRIVATE).getString("com.josef.tv.auth.email", "default");
+                String password = getContext().getSharedPreferences("com.josef.tv.prefs.main", Context.MODE_PRIVATE).getString("com.josef.tv.auth.password", "default");
+
+                if (email == "default" && password == "default") return;
+
+                mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+
+                            Intent intent = new Intent("com.josef.tv.auth.onCompleteListener");
+                            intent.putExtra("com.josef.tv.auth.onCompleteListener.key", "Firebase Authentication is successful :" + task.isSuccessful());
+                            getContext().sendBroadcast(intent);
+                            getContext().startActivity(new Intent(getContext(), VerticalGridActivity.class));
+                            getActivity().finishAfterTransition();
                         }
-                    });
-                }
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+
+                        Intent intent = new Intent("com.josef.tv.auth.onFailureListener");
+                        intent.putExtra("com.josef.tv.auth.onFailureListener.key", e.getMessage());
+                        getContext().sendBroadcast(intent);
+                    }
+                });
+
 
             }
             if (action.getId() == EMAIL) {
-                email = getString(action.toString().replaceAll("\\s+", ""),8);
+                String email = getString(action.toString().replaceAll("\\s+", ""), 8);
+                Intent intent = new Intent("com.josef.tv.auth.email");
+                intent.putExtra("com.josef.tv.auth.email.key", email);
+                getContext().sendBroadcast(intent);
             }
             if (action.getId() == PASSWORD) {
-                password = getString(action.toString().replaceAll("\\s+", ""),8);
-                Intent intent = new Intent("com.yourcompany.testIntent");
-                intent.putExtra("password", password);
+                String password = getString(action.toString().replaceAll("\\s+", ""), 8);
+                Intent intent = new Intent("com.josef.tv.auth.password");
+                intent.putExtra("com.josef.tv.auth.password.key", password);
                 getContext().sendBroadcast(intent);
             }
             if (action.getId() == CONTINUE2) {
@@ -231,7 +297,8 @@ public class AuthenticationActivity extends FragmentActivity {
             matcher = pattern.matcher(email);
             return matcher.matches();
         }
-        public String getString(String s, int num){
+
+        public String getString(String s, int num) {
             return s.substring(num);
         }
     }
