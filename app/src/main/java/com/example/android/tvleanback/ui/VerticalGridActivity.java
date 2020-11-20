@@ -16,32 +16,18 @@
 
 package com.example.android.tvleanback.ui;
 
-import androidx.fragment.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.FrameLayout;
-import android.widget.LinearLayout;
-import android.widget.Toast;
-import androidx.fragment.app.FragmentManager;
-import com.example.android.tvleanback.R;
-import com.example.android.tvleanback.net.LoginActivity;
-import com.google.android.gms.auth.api.Auth;
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
-import com.google.android.gms.auth.api.signin.GoogleSignInResult;
-import com.google.android.gms.common.SignInButton;
-import com.google.firebase.auth.FirebaseUser;
-import androidx.constraintlayout.widget.ConstraintLayout;
 
-import static com.example.android.tvleanback.ui.AuthenticationActivity.mAuth;
+import com.example.android.tvleanback.R;
+import com.google.firebase.auth.FirebaseAuth;
 
 public class VerticalGridActivity extends LeanbackActivity {
 
     /**
      * Called when the activity is first created.
      */
-
+    public static final int REQUEST_CODE = 1;
 
     private static final String TAG = "VerticalGridActivity";
     @Override
@@ -51,12 +37,10 @@ public class VerticalGridActivity extends LeanbackActivity {
         getWindow().setBackgroundDrawableResource(R.color.default_background);
     }
 
-
-
-
     @Override
     public void onBackPressed(){
-        startActivity(new Intent(this, AuthenticationActivity.class));
+        Intent intent = new Intent(this, AuthenticationActivity.class);
+        startActivityForResult(intent , REQUEST_CODE);
         this.finishAfterTransition();
     }
 }

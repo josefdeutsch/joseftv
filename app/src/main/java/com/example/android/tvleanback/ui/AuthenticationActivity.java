@@ -16,6 +16,8 @@
 
 package com.example.android.tvleanback.ui;
 
+import android.app.Activity;
+import android.app.Dialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -32,6 +34,8 @@ import androidx.leanback.widget.GuidedAction;
 
 import android.text.InputType;
 import android.util.Log;
+import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.example.android.tvleanback.R;
@@ -59,54 +63,68 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static android.content.ContentValues.TAG;
+import static com.example.android.tvleanback.ui.VerticalGridActivity.REQUEST_CODE;
 
 public class AuthenticationActivity extends FragmentActivity {
 
-    private static final int CONTINUE = 2;
-    private static final int CONTINUE2 = 3;
     private static final int PASSWORD = 5;
     private static final int EMAIL = 6;
+    private static final int CONTINUE = 2;
 
     private static final String TAG = "AuthenticationActivity";
 
     public static FirebaseAuth mAuth;
     public FirebaseAuth.AuthStateListener mAuthListener;
     private final IntentFilter filter = new IntentFilter("com.josef.tv.filter");
+    
+    Dialog progressBar;
+
+    public void showProgressbar(Activity activity) {
+        if (progressBar == null) {
+            progressBar = new Dialog(activity, android.R.style.Theme_Black_NoTitleBar_Fullscreen);
+            progressBar.setContentView(R.layout.progressbar_layout);
+            progressBar.show();
+        }
+    }
+
+    public void hideProgressbar() {
+        if (progressBar != null) {
+            progressBar.hide();
+            progressBar.dismiss();
+            progressBar = null;
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         FirebaseApp.initializeApp(this);
         mAuth = FirebaseAuth.getInstance();
-        mAuthListener = new FirebaseAuth.AuthStateListener() {
-            @Override
-            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                Log.d(TAG, "onAuthStateChanged: ");
-                //showProgressingView();
-                FirebaseUser user = firebaseAuth.getCurrentUser();
-                if (user != null) {
-                    Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
-                    FirebaseDatabase database = FirebaseDatabase.getInstance();//
-                    DatabaseReference myRef = database.getReference("users").child(user.getUid());
-                    myRef.addValueEventListener(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(DataSnapshot dataSnapshot) {
-                            String value = dataSnapshot.child("png").getValue().toString();
-                            Log.d(TAG, "onDataChange: " + value);
-                            Intent serviceIntent = new Intent(getApplicationContext(), FetchVideoService.class);
-                            serviceIntent.putExtra("data", value);
-                            getApplication().startService(serviceIntent);
-                        }
+        mAuth.signOut();
+        mAuthListener = firebaseAuth -> {
 
-                        @Override
-                        public void onCancelled(DatabaseError error) {
-                            Log.w(TAG, "Failed to read value.", error.toException());
-                        }
-                    });
-                } else {
-                    Log.d(TAG, "onAuthStateChanged:signed_out");
-                }
-                //  updateUI(user);
+            FirebaseUser user = firebaseAuth.getCurrentUser();
+            if (user != null) {
+                showProgressbar(AuthenticationActivity.this);
+                FirebaseDatabase database = FirebaseDatabase.getInstance();//
+                DatabaseReference myRef = database.getReference("users").child(user.getUid());
+                myRef.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        String value = dataSnapshot.child("png").getValue().toString();
+                        Intent serviceIntent = new Intent(getApplicationContext(), FetchVideoService.class);
+                        serviceIntent.putExtra("data", value);
+                        getApplication().startService(serviceIntent);
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError error) {
+                        Toast.makeText(getApplicationContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
+                        hideProgressbar();
+                    }
+                });
+            } else {
+                hideProgressbar();
             }
         };
         if (null == savedInstanceState) {
@@ -175,7 +193,6 @@ public class AuthenticationActivity extends FragmentActivity {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        Log.d(TAG, "onDestroy: ");
 
         SharedPreferences prefs = this.getSharedPreferences("com.josef.tv.prefs.main", Context.MODE_PRIVATE);
         prefs.edit().putString("com.josef.tv.auth.email", "default").apply();
@@ -183,12 +200,11 @@ public class AuthenticationActivity extends FragmentActivity {
         prefs.edit().putString("com.josef.tv.auth.onCompleteListener", "default").apply();
         prefs.edit().putString("com.josef.tv.auth.onFailureListener", "default").apply();
 
+        hideProgressbar();
+
     }
 
     public static class FirstStepFragment extends GuidedStepSupportFragment {
-
-        final Pattern pattern = android.util.Patterns.EMAIL_ADDRESS;
-        Matcher matcher;
 
         @Override
         public int onProvideTheme() {
@@ -229,15 +245,9 @@ public class AuthenticationActivity extends FragmentActivity {
                     .title(getString(R.string.guidedstep_login))
                     .build();
 
-            GuidedAction logout = new GuidedAction.Builder(getContext())
-                    .id(CONTINUE2)
-                    .title(getString(R.string.guidedstep_logout))
-                    .build();
-
             actions.add(enterUsername);
             actions.add(enterPassword);
             actions.add(login);
-            actions.add(logout);
 
         }
 
@@ -287,15 +297,6 @@ public class AuthenticationActivity extends FragmentActivity {
                 intent.putExtra("com.josef.tv.auth.password.key", password);
                 getContext().sendBroadcast(intent);
             }
-            if (action.getId() == CONTINUE2) {
-                mAuth.signOut();
-            }
-        }
-
-        public boolean validateEmail(CharSequence email) {
-            if (email == null) return false;
-            matcher = pattern.matcher(email);
-            return matcher.matches();
         }
 
         public String getString(String s, int num) {
@@ -305,7 +306,13 @@ public class AuthenticationActivity extends FragmentActivity {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
+        try {
+            super.onActivityResult(requestCode, resultCode, data);
+            if (requestCode == REQUEST_CODE && resultCode == RESULT_OK) { }
+        } catch (Exception ex) {
+            Toast.makeText(this, ex.toString(),
+                    Toast.LENGTH_SHORT).show();
+        }
     }
 
 }
