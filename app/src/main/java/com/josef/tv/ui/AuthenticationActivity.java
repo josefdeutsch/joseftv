@@ -22,10 +22,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
-import android.net.ConnectivityManager;
-import android.os.AsyncTask;
 import android.os.Bundle;
-
 import androidx.annotation.NonNull;
 import androidx.fragment.app.FragmentActivity;
 import androidx.leanback.app.GuidedStepSupportFragment;
@@ -34,9 +31,7 @@ import androidx.leanback.widget.GuidedAction;
 import android.text.InputType;
 import android.util.Log;
 import android.widget.Toast;
-
 import com.josef.tv.OnNetWorkTask;
-import com.josef.tv.Utils;
 import com.josef.tv.tvleanback.R;
 import com.josef.tv.data.FetchVideoService;
 import com.google.firebase.FirebaseApp;
@@ -47,11 +42,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-
-import java.io.IOException;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.List;
 
 import static com.josef.tv.Utils.hideProgressbar;
@@ -67,12 +57,13 @@ public class AuthenticationActivity extends FragmentActivity {
     private static final String TAG = "AuthenticationActivity";
 
     public static FirebaseAuth mAuth;
-    private  FirebaseAuth.AuthStateListener mAuthListener;
+    private static FirebaseAuth.AuthStateListener mAuthListener;
+
     private final IntentFilter auth_tokens = new IntentFilter("com.josef.tv.filter");
 
     private static AuthenticationActivity authenticationActivity;
 
-    public static AuthenticationActivity getAuthenticationActivity(){
+    public static AuthenticationActivity getAuthenticationActivity() {
         return authenticationActivity;
     }
 
@@ -80,8 +71,6 @@ public class AuthenticationActivity extends FragmentActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         FirebaseApp.initializeApp(this);
-        // boolean booleans = isNetworkAvailable(this);
-        // Log.d(TAG, "onCreate: "+booleans);
         mAuth = FirebaseAuth.getInstance();
         mAuth.signOut();
         mAuthListener = firebaseAuth -> {

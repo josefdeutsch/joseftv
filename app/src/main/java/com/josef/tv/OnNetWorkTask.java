@@ -39,8 +39,6 @@ public class OnNetWorkTask extends AsyncTask<Void, Boolean, Boolean> {
             Utils.hideProgressbar();
             Toast.makeText(getAuthenticationActivity(), "Network not available..!", Toast.LENGTH_SHORT).show();
         }
-
-        
     }
 
     public boolean pingGoogle() {
