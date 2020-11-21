@@ -46,7 +46,7 @@
         android:theme="@style/Theme.Leanback"
         tools:ignore="GoogleAppIndexingWarning">
 
-        <activity android:name="com.josef.tv.mobile.MobileWelcomeActivity">
+        <activity android:name="com.josef.tv.mobile.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

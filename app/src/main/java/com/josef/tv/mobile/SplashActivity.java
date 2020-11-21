@@ -18,16 +18,20 @@ package com.josef.tv.mobile;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 
 import com.josef.tv.tvleanback.R;
 import com.josef.tv.ui.AuthenticationActivity;
 
-public class MobileWelcomeActivity extends Activity {
+public class SplashActivity extends Activity {
 
+    private final Handler handler = new Handler(Looper.getMainLooper());
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_mobile_welcome);
-        startActivity(new Intent(this, AuthenticationActivity.class));
+        setContentView(R.layout.activity_splash);
+
+        handler.postDelayed(() -> startActivity(new Intent(SplashActivity.this, AuthenticationActivity.class)), 3000);
     }
 }

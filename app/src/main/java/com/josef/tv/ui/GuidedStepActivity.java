@@ -49,8 +49,10 @@ public class GuidedStepActivity extends FragmentActivity {
             "Here's another thing you can do",
             "Here's one more thing you can do"
     };
+
     private static final int[] OPTION_DRAWABLES = {R.drawable.ic_guidedstep_option_a,
             R.drawable.ic_guidedstep_option_b, R.drawable.ic_guidedstep_option_c};
+
     private static final boolean[] OPTION_CHECKED = {true, false, false};
 
     @Override

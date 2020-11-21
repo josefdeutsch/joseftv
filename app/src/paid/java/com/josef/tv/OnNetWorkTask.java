@@ -3,6 +3,8 @@ package com.josef.tv;
 import android.os.AsyncTask;
 import android.widget.Toast;
 
+import com.josef.tv.Utils;
+
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
