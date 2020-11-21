@@ -16,7 +16,6 @@
 
 package com.josef.tv.ui;
 
-import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -24,33 +23,23 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
-import android.net.Network;
-import android.net.NetworkCapabilities;
-import android.net.NetworkInfo;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.FragmentActivity;
-import androidx.leanback.animation.LogDecelerateInterpolator;
 import androidx.leanback.app.GuidedStepSupportFragment;
 import androidx.leanback.widget.GuidanceStylist;
 import androidx.leanback.widget.GuidedAction;
-
 import android.text.InputType;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.google.android.exoplayer2.util.Util;
-import com.josef.tv.NetworkUtil;
+import com.josef.tv.OnNetWorkTask;
+import com.josef.tv.Utils;
 import com.josef.tv.tvleanback.R;
 import com.josef.tv.data.FetchVideoService;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.FirebaseApp;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -65,7 +54,6 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.List;
 
-import static android.view.View.Z;
 import static com.josef.tv.Utils.hideProgressbar;
 import static com.josef.tv.Utils.showProgressbar;
 import static com.josef.tv.ui.VerticalGridActivity.REQUEST_CODE;
@@ -79,10 +67,14 @@ public class AuthenticationActivity extends FragmentActivity {
     private static final String TAG = "AuthenticationActivity";
 
     public static FirebaseAuth mAuth;
-    public FirebaseAuth.AuthStateListener mAuthListener;
+    private  FirebaseAuth.AuthStateListener mAuthListener;
     private final IntentFilter auth_tokens = new IntentFilter("com.josef.tv.filter");
-    private final IntentFilter connectivity_filter = new IntentFilter("android.net.conn.CONNECTIVITY_CHANGE");
 
+    private static AuthenticationActivity authenticationActivity;
+
+    public static AuthenticationActivity getAuthenticationActivity(){
+        return authenticationActivity;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -118,10 +110,10 @@ public class AuthenticationActivity extends FragmentActivity {
                 hideProgressbar();
             }
         };
+
         if (null == savedInstanceState) {
             GuidedStepSupportFragment.addAsRoot(this, new FirstStepFragment(), android.R.id.content);
         }
-
 
         auth_tokens.addAction("com.josef.tv.auth.email");
         auth_tokens.addAction("com.josef.tv.auth.password");
@@ -164,46 +156,21 @@ public class AuthenticationActivity extends FragmentActivity {
 
         }
     };
-    private final BroadcastReceiver connectivityReceiver = new BroadcastReceiver() {
-
-        private static final String TAG = "Broadcastreceiver";
-        private ConnectivityManager connectivityManager;
-
-        @Override
-        public void onReceive(final Context context, final Intent intent) {
-
-            // int status = NetworkUtil.getConnectivityStatusString(context);
-            if ("android.net.conn.CONNECTIVITY_CHANGE".equals(intent.getAction())) {
-                //   Log.d(TAG, "onReceive: ");
-                new AsyncTask<Void, Void, Void>() {
-                    @Override
-                    protected Void doInBackground(Void... voids) {
-
-                        // isNetworkAvailable(context);
-                        return null;
-                    }
-                }.execute();
-                // Log.d(TAG, "onReceive: "+String.valueOf(booleans));
-            }
-        }
-
-
-    };
 
     @Override
     public void onStart() {
         super.onStart();
+        authenticationActivity = this;
         mAuth.addAuthStateListener(mAuthListener);
         this.registerReceiver(networkReceiver, auth_tokens);
-        this.registerReceiver(connectivityReceiver, connectivity_filter);
     }
 
     @Override
     public void onStop() {
         super.onStop();
+        authenticationActivity = this;
         mAuth.removeAuthStateListener(mAuthListener);
         this.unregisterReceiver(networkReceiver);
-        this.unregisterReceiver(connectivityReceiver);
     }
 
     @Override
@@ -271,7 +238,7 @@ public class AuthenticationActivity extends FragmentActivity {
         @Override
         public void onGuidedActionClicked(GuidedAction action) {
             if (action.getId() == CONTINUE) {
-                new NetworkUtil(aboolen -> {
+                new OnNetWorkTask(aboolen -> {
                     if (!aboolen) {
                         Toast.makeText(getContext(), "Network not available !", Toast.LENGTH_SHORT).show();
                         return;

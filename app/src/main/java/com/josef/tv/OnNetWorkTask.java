@@ -1,14 +1,16 @@
 package com.josef.tv;
 
 import android.os.AsyncTask;
+import android.widget.Toast;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+import static com.josef.tv.ui.AuthenticationActivity.getAuthenticationActivity;
 
-public class NetworkUtil extends AsyncTask<Void, Boolean, Boolean> {
+public class OnNetWorkTask extends AsyncTask<Void, Boolean, Boolean> {
 
     private OnAuthConnecting onAuthConnecting;
 
@@ -16,7 +18,7 @@ public class NetworkUtil extends AsyncTask<Void, Boolean, Boolean> {
         void isConnected(boolean aboolen);
     }
 
-    public NetworkUtil(OnAuthConnecting onAuthConnecting) {
+    public OnNetWorkTask(OnAuthConnecting onAuthConnecting) {
         this.onAuthConnecting = onAuthConnecting;
     }
 
@@ -25,8 +27,20 @@ public class NetworkUtil extends AsyncTask<Void, Boolean, Boolean> {
         return pingGoogle();
     }
 
+    @Override
+    protected void onPreExecute() {
+        super.onPreExecute();
+        Utils.showProgressbar(getAuthenticationActivity());
+    }
+
     protected void onPostExecute(Boolean result) {
         onAuthConnecting.isConnected(result);
+        if(!result){
+            Utils.hideProgressbar();
+            Toast.makeText(getAuthenticationActivity(), "Network not available..!", Toast.LENGTH_SHORT).show();
+        }
+
+        
     }
 
     public boolean pingGoogle() {
@@ -48,8 +62,3 @@ public class NetworkUtil extends AsyncTask<Void, Boolean, Boolean> {
         return aboolean;
     }
 }
-
-
-
-
-

@@ -92,12 +92,15 @@
         <!-- Provides search suggestions for keywords against video metadata. -->
         <provider
             android:name="com.josef.tv.data.VideoProvider"
-            android:authorities="${packageName}"
+            android:authorities="${applicationId}"
             android:permission="${applicationId}.ACCESS_VIDEO_DATA"
-            android:exported="true">
+            android:exported="false"
+            android:enabled="true"
+            android:grantUriPermissions="true">
             <path-permission
                 android:pathPrefix="/search"
                 android:readPermission="android.permission.GLOBAL_SEARCH" />
+
         </provider>
 
         <receiver
