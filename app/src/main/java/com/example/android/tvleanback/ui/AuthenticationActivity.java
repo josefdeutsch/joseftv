@@ -16,14 +16,16 @@
 
 package com.example.android.tvleanback.ui;
 
-import android.app.Activity;
-import android.app.Dialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
+import android.net.ConnectivityManager;
+import android.net.Network;
+import android.net.NetworkCapabilities;
+import android.os.AsyncTask;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -34,23 +36,17 @@ import androidx.leanback.widget.GuidedAction;
 
 import android.text.InputType;
 import android.util.Log;
-import android.view.View;
-import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.example.android.tvleanback.NetworkUtil;
 import com.example.android.tvleanback.R;
 import com.example.android.tvleanback.data.FetchVideoService;
-import com.google.android.gms.auth.api.Auth;
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
-import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseAuthException;
-import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -58,11 +54,13 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
-import static android.content.ContentValues.TAG;
+import static com.example.android.tvleanback.Utils.hideProgressbar;
+import static com.example.android.tvleanback.Utils.showProgressbar;
 import static com.example.android.tvleanback.ui.VerticalGridActivity.REQUEST_CODE;
 
 public class AuthenticationActivity extends FragmentActivity {
@@ -75,30 +73,16 @@ public class AuthenticationActivity extends FragmentActivity {
 
     public static FirebaseAuth mAuth;
     public FirebaseAuth.AuthStateListener mAuthListener;
-    private final IntentFilter filter = new IntentFilter("com.josef.tv.filter");
-    
-    Dialog progressBar;
+    private final IntentFilter auth_tokens = new IntentFilter("com.josef.tv.filter");
+    private final IntentFilter connectivity_filter = new IntentFilter("android.net.conn.CONNECTIVITY_CHANGE");
 
-    public void showProgressbar(Activity activity) {
-        if (progressBar == null) {
-            progressBar = new Dialog(activity, android.R.style.Theme_Black_NoTitleBar_Fullscreen);
-            progressBar.setContentView(R.layout.progressbar_layout);
-            progressBar.show();
-        }
-    }
-
-    public void hideProgressbar() {
-        if (progressBar != null) {
-            progressBar.hide();
-            progressBar.dismiss();
-            progressBar = null;
-        }
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         FirebaseApp.initializeApp(this);
+        // boolean booleans = isNetworkAvailable(this);
+        // Log.d(TAG, "onCreate: "+booleans);
         mAuth = FirebaseAuth.getInstance();
         mAuth.signOut();
         mAuthListener = firebaseAuth -> {
@@ -132,12 +116,10 @@ public class AuthenticationActivity extends FragmentActivity {
         }
 
 
-        filter.addAction("com.josef.tv.auth.email");
-        filter.addAction("com.josef.tv.auth.password");
-        filter.addAction("com.josef.tv.auth.onCompleteListener");
-        filter.addAction("com.josef.tv.auth.onFailureListener");
-
-
+        auth_tokens.addAction("com.josef.tv.auth.email");
+        auth_tokens.addAction("com.josef.tv.auth.password");
+        auth_tokens.addAction("com.josef.tv.auth.onCompleteListener");
+        auth_tokens.addAction("com.josef.tv.auth.onFailureListener");
     }
 
     private final BroadcastReceiver networkReceiver = new BroadcastReceiver() {
@@ -175,12 +157,66 @@ public class AuthenticationActivity extends FragmentActivity {
 
         }
     };
+    private final BroadcastReceiver connectivityReceiver = new BroadcastReceiver() {
+
+        private static final String TAG = "Broadcastreceiver";
+        private ConnectivityManager connectivityManager;
+
+        @Override
+        public void onReceive(final Context context, final Intent intent) {
+
+            // int status = NetworkUtil.getConnectivityStatusString(context);
+            if ("android.net.conn.CONNECTIVITY_CHANGE".equals(intent.getAction())) {
+                //   Log.d(TAG, "onReceive: ");
+                new AsyncTask<Void, Void, Void>() {
+                    @Override
+                    protected Void doInBackground(Void... voids) {
+                        Log.d(TAG, "doInBackground: " + isNetworkAvailable(context));
+
+                       // isNetworkAvailable(context);
+                        return null;
+                    }
+                }.execute();
+                // Log.d(TAG, "onReceive: "+String.valueOf(booleans));
+            }
+        }
+
+        public boolean isConnectedToTheNetwork(Context context, ConnectivityManager connectivityManager) {
+            if (connectivityManager == null)
+                connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+            Network nw = connectivityManager.getActiveNetwork();
+            if (nw == null) return false;
+            NetworkCapabilities actNw = connectivityManager.getNetworkCapabilities(nw);
+            return actNw != null && (
+                    actNw.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) ||
+                            actNw.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) ||
+                            actNw.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET) ||
+                            actNw.hasTransport(NetworkCapabilities.TRANSPORT_BLUETOOTH));
+        }
+
+        public boolean isNetworkAvailable(Context context) {
+            boolean success = false;
+            try {
+                URL url = new URL("https://www.google.com");
+                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+                connection.setConnectTimeout(10000);
+                connection.connect();
+                success = connection.getResponseCode() == 200;
+            } catch (IOException e) {
+              //  e.printStackTrace();
+            }
+            return success;
+        }
+
+    };
+
 
     @Override
     public void onStart() {
         super.onStart();
         mAuth.addAuthStateListener(mAuthListener);
-        this.registerReceiver(networkReceiver, filter);
+        this.registerReceiver(networkReceiver, auth_tokens);
+        this.registerReceiver(connectivityReceiver, connectivity_filter);
     }
 
     @Override
@@ -188,6 +224,7 @@ public class AuthenticationActivity extends FragmentActivity {
         super.onStop();
         mAuth.removeAuthStateListener(mAuthListener);
         this.unregisterReceiver(networkReceiver);
+        this.unregisterReceiver(connectivityReceiver);
     }
 
     @Override
@@ -256,6 +293,7 @@ public class AuthenticationActivity extends FragmentActivity {
         public void onGuidedActionClicked(GuidedAction action) {
             if (action.getId() == CONTINUE) {
 
+
                 String email = getContext().getSharedPreferences("com.josef.tv.prefs.main", Context.MODE_PRIVATE).getString("com.josef.tv.auth.email", "default");
                 String password = getContext().getSharedPreferences("com.josef.tv.prefs.main", Context.MODE_PRIVATE).getString("com.josef.tv.auth.password", "default");
 
@@ -271,6 +309,8 @@ public class AuthenticationActivity extends FragmentActivity {
                             getContext().sendBroadcast(intent);
                             getContext().startActivity(new Intent(getContext(), VerticalGridActivity.class));
                             getActivity().finishAfterTransition();
+                        } else if (!task.isSuccessful()) {
+                            Log.d(TAG, "onComplete: " + "not successful");
                         }
                     }
                 }).addOnFailureListener(new OnFailureListener() {
@@ -304,11 +344,48 @@ public class AuthenticationActivity extends FragmentActivity {
         }
     }
 
+    public static class AlertStepFragment extends GuidedStepSupportFragment {
+
+        @Override
+        public int onProvideTheme() {
+            return R.style.Theme_Example_Leanback_GuidedStep_First;
+        }
+
+        @Override
+        @NonNull
+        public GuidanceStylist.Guidance onCreateGuidance(@NonNull Bundle savedInstanceState) {
+            String title = getString(R.string.pref_title_screen_signin);
+            String description = getString(R.string.pref_title_login_description);
+            Drawable icon = getActivity().getDrawable(R.drawable.ic_webdesignsvg_02);
+            return new GuidanceStylist.Guidance(title, description, "", icon);
+        }
+
+        @Override
+        public void onCreateActions(@NonNull List<GuidedAction> actions, Bundle savedInstanceState) {
+
+            GuidedAction alert = new GuidedAction.Builder(getContext())
+                    .id(9)
+                    .title(getString(R.string.alert_message))
+                    .descriptionEditable(true)
+                    .descriptionInputType(InputType.TYPE_TEXT_VARIATION_WEB_EMAIL_ADDRESS | InputType.TYPE_CLASS_TEXT)
+                    .focusable(true)
+                    .build();
+
+            actions.add(alert);
+        }
+
+        @Override
+        public void onGuidedActionClicked(GuidedAction action) {
+
+        }
+    }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         try {
             super.onActivityResult(requestCode, resultCode, data);
-            if (requestCode == REQUEST_CODE && resultCode == RESULT_OK) { }
+            if (requestCode == REQUEST_CODE && resultCode == RESULT_OK) {
+            }
         } catch (Exception ex) {
             Toast.makeText(this, ex.toString(),
                     Toast.LENGTH_SHORT).show();

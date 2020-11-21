@@ -17,6 +17,7 @@
 package com.example.android.tvleanback;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.graphics.Point;
@@ -96,5 +97,23 @@ public class Utils {
             mmr.setDataSource(videoUrl);
         }
         return Long.parseLong(mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION));
+    }
+
+    static Dialog progressBar;
+
+    public static void showProgressbar(Activity activity) {
+        if (progressBar == null) {
+            progressBar = new Dialog(activity, android.R.style.Theme_Black_NoTitleBar_Fullscreen);
+            progressBar.setContentView(R.layout.progressbar_layout);
+            progressBar.show();
+        }
+    }
+
+    public static void hideProgressbar() {
+        if (progressBar != null) {
+            progressBar.hide();
+            progressBar.dismiss();
+            progressBar = null;
+        }
     }
 }
