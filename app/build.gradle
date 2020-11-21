@@ -4,7 +4,7 @@ apply plugin: 'com.google.gms.google-services'
 android {
     compileSdkVersion 28
     defaultConfig {
-        applicationId "com.example.android.tvleanback"
+        applicationId "com.josef.tv"
         minSdkVersion 23
         targetSdkVersion 28
         versionCode 3
@@ -29,7 +29,7 @@ android {
             versionName = 'free'
             signingConfig signingConfigs.config
             versionNameSuffix = 'com.josef.tv.free'
-            minSdkVersion 28
+            minSdkVersion 23
         }
         paid {
             dimension = 'version'
@@ -37,7 +37,7 @@ android {
             versionName = 'paid'
             versionNameSuffix = 'com.josef.tv.paid'
             signingConfig signingConfigs.config
-            minSdkVersion 28
+            minSdkVersion 23
         }
     }
     buildTypes {

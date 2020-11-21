@@ -28,7 +28,7 @@ import com.josef.tv.data.VideoContract.VideoEntry;
 public class VideoDbHelper extends SQLiteOpenHelper {
 
     // Change this when you change the database schema.
-    private static final int DATABASE_VERSION = 4;
+    private static final int DATABASE_VERSION = 5;
 
     // The name of our database.
     private static final String DATABASE_NAME = "leanback.db";
