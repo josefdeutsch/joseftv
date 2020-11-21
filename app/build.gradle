@@ -25,7 +25,7 @@ android {
     productFlavors {
         free {
             dimension = 'version'
-            applicationId = 'com.josef.tv.free'
+            applicationId = 'com.josef.tv'
             versionName = 'free'
             signingConfig signingConfigs.config
             versionNameSuffix = 'com.josef.tv.free'
@@ -33,7 +33,7 @@ android {
         }
         paid {
             dimension = 'version'
-            applicationId = 'com.josef.tv.paid'
+            applicationId = 'com.josef.tv'
             versionName = 'paid'
             versionNameSuffix = 'com.josef.tv.paid'
             signingConfig signingConfigs.config

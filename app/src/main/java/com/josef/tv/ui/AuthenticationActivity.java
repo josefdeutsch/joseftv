@@ -42,6 +42,8 @@ import android.text.InputType;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.google.android.exoplayer2.util.Util;
+import com.josef.tv.NetworkUtil;
 import com.josef.tv.tvleanback.R;
 import com.josef.tv.data.FetchVideoService;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -269,7 +271,38 @@ public class AuthenticationActivity extends FragmentActivity {
         @Override
         public void onGuidedActionClicked(GuidedAction action) {
             if (action.getId() == CONTINUE) {
-                new IsNetworkAvailable(getContext(), getActivity()).execute();
+                new NetworkUtil(aboolen -> {
+                    if (!aboolen) {
+                        Toast.makeText(getContext(), "Network not available !", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+
+                    String email = getContext().getSharedPreferences("com.josef.tv.prefs.main", Context.MODE_PRIVATE).getString("com.josef.tv.auth.email", "default");
+                    String password = getContext().getSharedPreferences("com.josef.tv.prefs.main", Context.MODE_PRIVATE).getString("com.josef.tv.auth.password", "default");
+
+                    if (email.equals("default") && password.equals("default")) return;
+
+                    mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
+
+                            Intent intent = new Intent("com.josef.tv.auth.onCompleteListener");
+                            intent.putExtra("com.josef.tv.auth.onCompleteListener.key", "Firebase Authentication is successful :" + task.isSuccessful());
+                            getContext().sendBroadcast(intent);
+                            getContext().startActivity(new Intent(getContext(), VerticalGridActivity.class));
+                            getActivity().finishAfterTransition();
+
+                        } else if (!task.isSuccessful()) {
+                            Log.d(TAG, "onComplete: " + "not successful");
+                        }
+
+                    }).addOnFailureListener(e -> {
+
+                        Intent intent = new Intent("com.josef.tv.auth.onFailureListener");
+                        intent.putExtra("com.josef.tv.auth.onFailureListener.key", e.getMessage());
+                        getContext().sendBroadcast(intent);
+
+                    });
+                }).execute();
             }
             if (action.getId() == EMAIL) {
                 String email = getString(action.toString().replaceAll("\\s+", ""), 8);
@@ -301,88 +334,4 @@ public class AuthenticationActivity extends FragmentActivity {
                     Toast.LENGTH_SHORT).show();
         }
     }
-
-    static class IsNetworkAvailable extends AsyncTask<Void, Boolean, Boolean> {
-
-        private Context context;
-        private Activity activity;
-
-        public IsNetworkAvailable(Context context, Activity activity) {
-            this.context = context;
-            this.activity = activity;
-        }
-
-        @Override
-        protected Boolean doInBackground(Void... voids) {
-            boolean aboolean = hasInternetConnection(context, connectivityManager);
-            return aboolean;
-        }
-
-        ConnectivityManager connectivityManager;
-
-        protected void onPostExecute(Boolean result) {
-            Log.d(TAG, "getPingResult: " + result);
-            if (!result) {
-                Toast.makeText(context, "Network is not available!", Toast.LENGTH_SHORT).show();
-            }
-        }
-
-        public boolean pingGoogle() {
-            boolean aboolean = false;
-            try {
-                URL url = new URL("https://www.google.com");
-                HttpURLConnection urlc = (HttpURLConnection) url.openConnection();
-                urlc.setRequestProperty("User-Agent", "Android Application:");
-                urlc.setRequestProperty("Connection", "close");
-                urlc.setConnectTimeout(1000); // mTimeout is in seconds
-                urlc.connect();
-                aboolean = urlc.getResponseCode() == 200;
-            } catch (MalformedURLException e1) {
-                e1.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            return aboolean;
-        }
-
-        public boolean isConnectedToTheNetwork(Context context, ConnectivityManager connectivityManager) {
-            if (connectivityManager == null)
-                connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-            Network nw = connectivityManager.getActiveNetwork();
-            if (nw == null) return false;
-            NetworkCapabilities actNw = connectivityManager.getNetworkCapabilities(nw);
-            return actNw != null && (
-                    actNw.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) ||
-                            actNw.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) ||
-                            actNw.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET) ||
-                            actNw.hasTransport(NetworkCapabilities.TRANSPORT_BLUETOOTH));
-        }
-
-        public boolean hasInternetConnection(final Context context, ConnectivityManager connectivityManager) {
-            if (connectivityManager == null)
-                connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-            Network nw = connectivityManager.getActiveNetwork();
-            final NetworkCapabilities capabilities = connectivityManager.getNetworkCapabilities(nw);
-            final NetworkInfo info = connectivityManager.getNetworkInfo(nw);
-            final NetworkInfo.DetailedState state = info.getDetailedState();
-            final boolean isConnectedOrConnecting
-                    = (state == NetworkInfo.DetailedState.CONNECTED)
-                    || (state == NetworkInfo.DetailedState.CONNECTING);
-            final boolean hasCapability;
-            //  if (BuildVersion.isPie()) {
-            hasCapability = capabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)    // API>=21
-                    && capabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_VALIDATED)            // API>=23
-                    && (capabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_NOT_SUSPENDED)    // API>=28
-                    || capabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_FOREGROUND));    // API>=28
-            //   } else if (BuildCheck.isMarshmallow()) {
-            //     hasCapability = capabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)	// API>=21
-            //              && capabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_VALIDATED);		// API>=23
-            //  } else {
-            //      hasCapability = capabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET);// API>=21
-            //   }
-            return isConnectedOrConnecting && hasCapability;
-        }
-
-    }
-
 }

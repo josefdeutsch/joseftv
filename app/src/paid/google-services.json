@@ -10,7 +10,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:690143347015:android:24be90ad5e06a953f60c62",
         "android_client_info": {
-          "package_name": "com.josef.tv.paid"
+          "package_name": "com.josef.tv"
         }
       },
       "oauth_client": [
@@ -18,7 +18,7 @@
           "client_id": "690143347015-lumkvi0qfkmgklu37jh803fa0coe0vh5.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.josef.tv.paid",
+            "package_name": "com.josef.tv",
             "certificate_hash": "8d650a1bc9b169bce72aff72c2fc51b8fd702401"
           }
         },

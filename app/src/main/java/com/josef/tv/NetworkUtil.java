@@ -1,41 +1,55 @@
 package com.josef.tv;
 
-import android.content.Context;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
+import android.os.AsyncTask;
 
-public class NetworkUtil {
-    public static final int TYPE_WIFI = 1;
-    public static final int TYPE_MOBILE = 2;
-    public static final int TYPE_NOT_CONNECTED = 0;
-    public static final int NETWORK_STATUS_NOT_CONNECTED = 0;
-    public static final int NETWORK_STATUS_WIFI = 1;
-    public static final int NETWORK_STATUS_MOBILE = 2;
+import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 
-    public static int getConnectivityStatus(Context context) {
-        ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
 
-        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
-        if (null != activeNetwork) {
-            if(activeNetwork.getType() == ConnectivityManager.TYPE_WIFI)
-                return TYPE_WIFI;
+public class NetworkUtil extends AsyncTask<Void, Boolean, Boolean> {
 
-            if(activeNetwork.getType() == ConnectivityManager.TYPE_MOBILE)
-                return TYPE_MOBILE;
-        }
-        return TYPE_NOT_CONNECTED;
+    private OnAuthConnecting onAuthConnecting;
+
+    public interface OnAuthConnecting {
+        void isConnected(boolean aboolen);
     }
 
-    public static int getConnectivityStatusString(Context context) {
-        int conn = NetworkUtil.getConnectivityStatus(context);
-        int status = 0;
-        if (conn == NetworkUtil.TYPE_WIFI) {
-            status = NETWORK_STATUS_WIFI;
-        } else if (conn == NetworkUtil.TYPE_MOBILE) {
-            status = NETWORK_STATUS_MOBILE;
-        } else if (conn == NetworkUtil.TYPE_NOT_CONNECTED) {
-            status = NETWORK_STATUS_NOT_CONNECTED;
+    public NetworkUtil(OnAuthConnecting onAuthConnecting) {
+        this.onAuthConnecting = onAuthConnecting;
+    }
+
+    @Override
+    protected Boolean doInBackground(Void... voids) {
+        return pingGoogle();
+    }
+
+    protected void onPostExecute(Boolean result) {
+        onAuthConnecting.isConnected(result);
+    }
+
+    public boolean pingGoogle() {
+        boolean aboolean = false;
+        try {
+            URL url = new URL("https://www.google.com");
+            HttpURLConnection urlc = (HttpURLConnection) url.openConnection();
+            urlc.setRequestProperty("User-Agent", "Android Application:");
+            urlc.setRequestProperty("Connection", "close");
+            urlc.setConnectTimeout(3000); // mTimeout is in seconds
+            urlc.connect();
+            aboolean = urlc.getResponseCode() == 200;
+            urlc.disconnect();
+        } catch (MalformedURLException e1) {
+            e1.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-        return status;
+        return aboolean;
     }
 }
+
+
+
+
+
