@@ -130,6 +130,10 @@
         <activity
             android:name="com.josef.tv.ui.AuthenticationActivity"
             android:theme="@style/Theme.Example.Leanback.GuidedStep" />
+
+        <activity android:name="com.josef.tv.ui.TVDialogActivity"
+            android:theme="@style/Theme.Leanback.GuidedStep"
+            />
     </application>
 
 </manifest>

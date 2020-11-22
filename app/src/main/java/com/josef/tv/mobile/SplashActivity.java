@@ -20,18 +20,76 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Log;
+import android.widget.Toast;
 
 import com.josef.tv.tvleanback.R;
 import com.josef.tv.ui.AuthenticationActivity;
+import com.josef.tv.ui.OnboardingActivity;
+
+import static com.josef.tv.ui.VerticalGridActivity.REQUEST_CODE;
 
 public class SplashActivity extends Activity {
 
     private final Handler handler = new Handler(Looper.getMainLooper());
+
+    private final static int RC_ONBOARD = 1;
+    public final static int RC_ONAUTH = 2;
+
+    private static SplashActivity splashActivity;
+
+    private static final String TAG = "SplashActivity";
+
+    public static SplashActivity getSplashActivity() {
+        return splashActivity;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                getSplashActivity().startActivityForResult(
+                        new Intent(getSplashActivity(),OnboardingActivity.class),RC_ONBOARD
+                );
+            }
+        }, 3000);
 
-        handler.postDelayed(() -> startActivity(new Intent(SplashActivity.this, AuthenticationActivity.class)), 3000);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        try {
+            super.onActivityResult(requestCode, resultCode, data);
+
+            if (requestCode == RC_ONBOARD && resultCode == RESULT_OK) {
+                Log.d(TAG, "onActivityResult: ");
+                getSplashActivity().startActivityForResult(
+                        new Intent(getSplashActivity(),AuthenticationActivity.class),RC_ONAUTH
+                );
+                getSplashActivity().finishAfterTransition();
+            }
+            if (requestCode == RC_ONAUTH && resultCode == RESULT_OK) {
+                getSplashActivity().finishAfterTransition();
+            }
+
+        } catch (Exception ex) {
+            Toast.makeText(this, ex.toString(),
+                    Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        splashActivity = this;
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        splashActivity = this;
     }
 }

@@ -22,6 +22,8 @@ import android.os.Bundle;
 import com.josef.tv.tvleanback.R;
 
 public class SettingsActivity extends Activity {
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

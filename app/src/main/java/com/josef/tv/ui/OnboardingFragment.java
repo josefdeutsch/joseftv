@@ -26,8 +26,14 @@ import android.content.SharedPreferences;
 import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.leanback.app.OnboardingSupportFragment;
+import androidx.lifecycle.LifecycleOwner;
+import androidx.lifecycle.LiveData;
+
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,6 +44,12 @@ import java.util.ArrayList;
 public class OnboardingFragment extends OnboardingSupportFragment {
 
     public static final String COMPLETED_ONBOARDING = "completed_onboarding";
+
+    private static final String TAG = "OnboardingFragment"; 
+
+    public static long getAnimationDuration() {
+        return ANIMATION_DURATION;
+    }
 
     private static final int[] pageTitles = {
             R.string.onboarding_title_welcome,
@@ -82,6 +94,7 @@ public class OnboardingFragment extends OnboardingSupportFragment {
         sharedPreferencesEditor.apply();
         // Let's go back to the MainActivity
 
+        Log.d(TAG, "onFinishFragment: ");
         Intent returnIntent = new Intent();
         getActivity().setResult(Activity.RESULT_OK,returnIntent);
         getActivity().finish();

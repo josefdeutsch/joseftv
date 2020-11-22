@@ -40,6 +40,7 @@ public class VerticalGridActivity extends LeanbackActivity {
     public void onBackPressed(){
         Intent intent = new Intent(this, AuthenticationActivity.class);
         startActivityForResult(intent , REQUEST_CODE);
+        finishAfterTransition();
         this.finishAfterTransition();
     }
 }
