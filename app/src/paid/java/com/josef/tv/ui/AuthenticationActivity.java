@@ -94,6 +94,7 @@ public class AuthenticationActivity extends FragmentActivity {
                 myRef.addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
+                        // add null check if user has not added anything...
                         String value = dataSnapshot.child("png").getValue().toString();
                         Intent serviceIntent = new Intent(getApplicationContext(), FetchVideoService.class);
                         serviceIntent.putExtra("data", value);
