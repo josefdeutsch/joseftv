@@ -46,7 +46,6 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.josef.tv.tvleanback.BuildConfig;
 import com.josef.tv.tvleanback.R;
 import com.josef.tv.data.VideoContract;
 import com.josef.tv.model.Video;
@@ -60,7 +59,6 @@ public class SearchFragment extends SearchSupportFragment
         implements SearchSupportFragment.SearchResultProvider,
         LoaderManager.LoaderCallbacks<Cursor> {
     private static final String TAG = "SearchFragment";
-    private static final boolean DEBUG = BuildConfig.DEBUG;
     private static final boolean FINISH_ON_RECOGNIZER_CANCELED = true;
     private static final int REQUEST_SPEECH = 0x00000010;
 
@@ -82,14 +80,9 @@ public class SearchFragment extends SearchSupportFragment
 
         setSearchResultProvider(this);
         setOnItemViewClickedListener(new ItemViewClickedListener());
-        if (DEBUG) {
-            Log.d(TAG, "User is initiating a search. Do we have RECORD_AUDIO permission? " +
-                hasPermission(Manifest.permission.RECORD_AUDIO));
-        }
+
         if (!hasPermission(Manifest.permission.RECORD_AUDIO)) {
-            if (DEBUG) {
-                Log.d(TAG, "Does not have RECORD_AUDIO, using SpeechRecognitionCallback");
-            }
+
             // SpeechRecognitionCallback is not required and if not provided recognition will be
             // handled using internal speech recognizer, in which case you must have RECORD_AUDIO
             // permission
@@ -103,8 +96,7 @@ public class SearchFragment extends SearchSupportFragment
                     }
                 }
             });
-        } else if (DEBUG) {
-            Log.d(TAG, "We DO have RECORD_AUDIO");
+
         }
     }
 
@@ -126,7 +118,7 @@ public class SearchFragment extends SearchSupportFragment
                         // If recognizer is canceled or failed, keep focus on the search orb
                         if (FINISH_ON_RECOGNIZER_CANCELED) {
                             if (!hasResults()) {
-                                if (DEBUG) Log.v(TAG, "Voice search canceled");
+                                //if (DEBUG) Log.v(TAG, "Voice search canceled");
                                 getView().findViewById(R.id.lb_search_bar_speech_orb).requestFocus();
                             }
                         }
@@ -143,14 +135,14 @@ public class SearchFragment extends SearchSupportFragment
 
     @Override
     public boolean onQueryTextChange(String newQuery) {
-        if (DEBUG) Log.i(TAG, String.format("Search text changed: %s", newQuery));
+      //  if (DEBUG) Log.i(TAG, String.format("Search text changed: %s", newQuery));
         loadQuery(newQuery);
         return true;
     }
 
     @Override
     public boolean onQueryTextSubmit(String query) {
-        if (DEBUG) Log.i(TAG, String.format("Search text submitted: %s", query));
+       // if (DEBUG) Log.i(TAG, String.format("Search text submitted: %s", query));
         loadQuery(query);
         return true;
     }

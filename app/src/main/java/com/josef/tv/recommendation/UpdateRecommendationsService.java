@@ -30,7 +30,6 @@ import androidx.recommendation.app.ContentRecommendation;
 import android.util.Log;
 
 import com.bumptech.glide.Glide;
-import com.josef.tv.tvleanback.BuildConfig;
 import com.josef.tv.tvleanback.R;
 import com.josef.tv.data.VideoContract;
 import com.josef.tv.model.Video;
@@ -109,7 +108,6 @@ public class UpdateRecommendationsService extends IntentService {
                     ContentRecommendation rec = builder.build();
                     Notification notification = rec.getNotificationObject(getApplicationContext());
 
-                    if (BuildConfig.DEBUG) Log.d(TAG, "Recommending video " + video.title);
 
                     // Recommend the content by publishing the notification.
                     mNotifManager.notify(id, notification);

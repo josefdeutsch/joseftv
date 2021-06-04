@@ -27,6 +27,7 @@ import androidx.leanback.widget.GuidedAction;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 
+import com.josef.tv.base.BaseActivity;
 import com.josef.tv.tvleanback.R;
 
 import java.util.List;
@@ -34,7 +35,7 @@ import java.util.List;
 /**
  * Activity that showcases different aspects of GuidedStepFragments.
  */
-public class GuidedStepActivity extends FragmentActivity {
+public class GuidedStepActivity extends BaseActivity {
 
     private static final int CONTINUE = 0;
     private static final int BACK = 1;

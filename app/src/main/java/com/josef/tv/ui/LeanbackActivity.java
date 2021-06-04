@@ -16,12 +16,12 @@
 package com.josef.tv.ui;
 
 import android.content.Intent;
-import androidx.fragment.app.FragmentActivity;
+import com.josef.tv.base.BaseActivity;
 
 /**
  * This parent class contains common methods that run in every activity such as search.
  */
-public abstract class LeanbackActivity extends FragmentActivity {
+public abstract class LeanbackActivity extends BaseActivity {
     @Override
     public boolean onSearchRequested() {
         startActivity(new Intent(this, SearchActivity.class));

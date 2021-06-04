@@ -15,21 +15,18 @@
  */
 package com.josef.tv.mobile;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
 import android.widget.Toast;
-
+import com.josef.tv.base.BaseActivity;
 import com.josef.tv.tvleanback.R;
 import com.josef.tv.ui.AuthenticationActivity;
 import com.josef.tv.ui.OnboardingActivity;
 
-import static com.josef.tv.ui.VerticalGridActivity.REQUEST_CODE;
-
-public class SplashActivity extends Activity {
+public class SplashActivity extends BaseActivity {
 
     private final Handler handler = new Handler(Looper.getMainLooper());
 
@@ -52,7 +49,7 @@ public class SplashActivity extends Activity {
             @Override
             public void run() {
                 getSplashActivity().startActivityForResult(
-                        new Intent(getSplashActivity(),OnboardingActivity.class),RC_ONBOARD
+                        new Intent(getSplashActivity(), AuthenticationActivity.class),RC_ONBOARD
                 );
             }
         }, 3000);

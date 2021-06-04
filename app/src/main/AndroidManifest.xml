@@ -47,6 +47,12 @@
         tools:ignore="GoogleAppIndexingWarning">
 
         <activity android:name="com.josef.tv.mobile.SplashActivity">
+
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LEANBACK_LAUNCHER" />
+            </intent-filter>
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

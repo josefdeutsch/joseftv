@@ -19,13 +19,14 @@ package com.josef.tv.ui;
 import android.os.Bundle;
 import androidx.fragment.app.FragmentActivity;
 
+import com.josef.tv.base.BaseActivity;
 import com.josef.tv.tvleanback.R;
 
 /*
  * OnboardingActivity for OnboardingFragment
  */
 
-public class OnboardingActivity extends FragmentActivity {
+public class OnboardingActivity extends BaseActivity {
 
     /**
      * Called when the activity is first created.

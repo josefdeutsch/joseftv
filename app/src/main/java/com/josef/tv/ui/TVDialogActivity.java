@@ -17,6 +17,8 @@ import androidx.leanback.app.GuidedStepSupportFragment;
 import androidx.leanback.widget.GuidanceStylist;
 import androidx.leanback.widget.GuidedAction;
 
+import com.josef.tv.base.BaseActivity;
+
 import java.util.List;
 
 import static com.josef.tv.ui.AuthenticationActivity.getAuthenticationActivity;
@@ -24,7 +26,7 @@ import static com.josef.tv.ui.AuthenticationActivity.getAuthenticationActivity;
 /**
  * Created by kurt on 16 08 2015 .
  */
-public class TVDialogActivity extends FragmentActivity implements DialogContract {
+public class TVDialogActivity extends BaseActivity implements DialogContract {
     private static final int YES = 0;
     private static final int NO = 1;
 

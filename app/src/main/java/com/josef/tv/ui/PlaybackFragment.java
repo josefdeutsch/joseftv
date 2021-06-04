@@ -23,6 +23,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.leanback.app.VideoSupportFragment;
@@ -43,6 +44,8 @@ import androidx.core.app.ActivityOptionsCompat;
 import androidx.loader.app.LoaderManager;
 import androidx.loader.content.CursorLoader;
 import androidx.loader.content.Loader;
+
+import com.google.android.exoplayer2.upstream.DataSource;
 import com.josef.tv.tvleanback.R;
 import com.josef.tv.data.VideoContract;
 import com.josef.tv.model.Playlist;
@@ -100,7 +103,7 @@ public class PlaybackFragment extends VideoSupportFragment {
         // Loads the playlist.
         Bundle args = new Bundle();
         args.putString(VideoContract.VideoEntry.COLUMN_CATEGORY, mVideo.category);
-        getLoaderManager()
+        LoaderManager.getInstance(this)
                 .initLoader(VideoLoaderCallbacks.QUEUE_VIDEOS_LOADER, args, mVideoLoaderCallbacks);
 
         mVideoCursorAdapter = setupRelatedVideosCursor();
@@ -210,14 +213,22 @@ public class PlaybackFragment extends VideoSupportFragment {
     }
 
     private void prepareMediaForPlaying(Uri mediaSourceUri) {
+
         String userAgent = Util.getUserAgent(getActivity(), "VideoPlayerGlue");
-        MediaSource mediaSource =
-                new ExtractorMediaSource(
-                        mediaSourceUri,
-                        new DefaultDataSourceFactory(getActivity(), userAgent),
-                        new DefaultExtractorsFactory(),
-                        null,
-                        null);
+
+        DataSource.Factory dataSourceFactory = new DefaultDataSourceFactory(getActivity(), userAgent);
+
+        MediaSource mediaSource = new ExtractorMediaSource.Factory(dataSourceFactory)
+                .createMediaSource(mediaSourceUri);
+
+
+        // MediaSource mediaSource =
+        //       new ExtractorMediaSource(
+        //             mediaSourceUri,
+        //           new DefaultDataSourceFactory(getActivity(), userAgent),
+        //         new DefaultExtractorsFactory(),
+        //       null,
+        //     null);
 
         mPlayer.prepare(mediaSource);
 
@@ -255,7 +266,7 @@ public class PlaybackFragment extends VideoSupportFragment {
 
         Bundle args = new Bundle();
         args.putString(VideoContract.VideoEntry.COLUMN_CATEGORY, mVideo.category);
-        getLoaderManager().initLoader(RELATED_VIDEOS_LOADER, args, mVideoLoaderCallbacks);
+        LoaderManager.getInstance(this).initLoader(RELATED_VIDEOS_LOADER, args, mVideoLoaderCallbacks);
 
         return videoCursorAdapter;
     }

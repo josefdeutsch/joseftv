@@ -19,9 +19,10 @@ package com.josef.tv.ui;
 import android.app.Activity;
 import android.os.Bundle;
 
+import com.josef.tv.base.BaseActivity;
 import com.josef.tv.tvleanback.R;
 
-public class SettingsActivity extends Activity {
+public class SettingsActivity extends BaseActivity {
 
 
     @Override
