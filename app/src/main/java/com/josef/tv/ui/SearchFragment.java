@@ -25,6 +25,7 @@ import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.os.Handler;
+
 import androidx.leanback.app.SearchSupportFragment;
 import androidx.leanback.widget.ArrayObjectAdapter;
 import androidx.leanback.widget.CursorObjectAdapter;
@@ -42,6 +43,7 @@ import androidx.core.app.ActivityOptionsCompat;
 import androidx.loader.app.LoaderManager;
 import androidx.loader.content.CursorLoader;
 import androidx.loader.content.Loader;
+
 import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Toast;
@@ -82,23 +84,11 @@ public class SearchFragment extends SearchSupportFragment
         setOnItemViewClickedListener(new ItemViewClickedListener());
 
         if (!hasPermission(Manifest.permission.RECORD_AUDIO)) {
+            startActivityForResult(getRecognizerIntent(), REQUEST_SPEECH);
+       }
 
-            // SpeechRecognitionCallback is not required and if not provided recognition will be
-            // handled using internal speech recognizer, in which case you must have RECORD_AUDIO
-            // permission
-            setSpeechRecognitionCallback(new SpeechRecognitionCallback() {
-                @Override
-                public void recognizeSpeech() {
-                    try {
-                        startActivityForResult(getRecognizerIntent(), REQUEST_SPEECH);
-                    } catch (ActivityNotFoundException e) {
-                        Log.e(TAG, "Cannot find activity for speech recognizer", e);
-                    }
-                }
-            });
-
-        }
     }
+
 
     @Override
     public void onPause() {
@@ -135,14 +125,14 @@ public class SearchFragment extends SearchSupportFragment
 
     @Override
     public boolean onQueryTextChange(String newQuery) {
-      //  if (DEBUG) Log.i(TAG, String.format("Search text changed: %s", newQuery));
+        //  if (DEBUG) Log.i(TAG, String.format("Search text changed: %s", newQuery));
         loadQuery(newQuery);
         return true;
     }
 
     @Override
     public boolean onQueryTextSubmit(String query) {
-       // if (DEBUG) Log.i(TAG, String.format("Search text submitted: %s", query));
+        // if (DEBUG) Log.i(TAG, String.format("Search text submitted: %s", query));
         loadQuery(query);
         return true;
     }
@@ -160,7 +150,7 @@ public class SearchFragment extends SearchSupportFragment
     private void loadQuery(String query) {
         if (!TextUtils.isEmpty(query) && !query.equals("nil")) {
             mQuery = query;
-            getLoaderManager().initLoader(mSearchLoaderId++, null, this);
+            LoaderManager.getInstance(this).initLoader(mSearchLoaderId++, null, this);
         }
     }
 
@@ -207,7 +197,7 @@ public class SearchFragment extends SearchSupportFragment
     private final class ItemViewClickedListener implements OnItemViewClickedListener {
         @Override
         public void onItemClicked(Presenter.ViewHolder itemViewHolder, Object item,
-                RowPresenter.ViewHolder rowViewHolder, Row row) {
+                                  RowPresenter.ViewHolder rowViewHolder, Row row) {
 
             if (item instanceof Video) {
                 Video video = (Video) item;
