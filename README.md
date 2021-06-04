@@ -1,21 +1,11 @@
-
-# JosephTV - Digital art is true.
+# Joseph - Digital art is true.
 
 ## Project Overview
-Joseph - “an app for providing art on smart TV”
-The task was to give users an interactive selection of digital works of art in the form of videos
-which can then be combined to a movie on SMART TV.
+I developed Joseph because I was looking for alternative ways to present my art. During my work I was confronted more and more with the idea of digital space. What exactly is digital space and how does it appear?
 
 ## Why this Project?
-I developed Joseph because I was looking for alternative ways to present my art.
-During my work I was confronted more and more with the idea of digital space.
-What exactly is digital space and how does it show itself?
-The way to reinterpret an exhibition space captivates me and has motivated me so much to implement and complete joseph according to my ideas.
-In the end, Joseph itself became a work of art and the metaphor: “The expression wanders through space” is the message that emanates from the heart of the matter.
+The way of reinterpreting an exhibition space fascinates me and has motivated me so much to implement and complete Joseph according to my ideas. In the end, Joseph himself became a work of art and the metaphor: "The expression travels through space" is the message that comes from the heart of the matter.To show that this can be seen by humans and thus by a work of art, we have to accept that digital art is real. The authenticity of a thing primarily determines its value and that is precisely why we have to admit it. The world is in a steady emergent process what was morally right today is where possible wrong tomorrow, but nothing like that with art, it goes timelessly through time. A solid component that can be reinterpreted over and over again. But every story is technologically influenced and if we think about it further, I am convinced that there is not only a digital work of art but also a digital space, because every thing is an instance of space.Then the willingness to authenticate a thing is the acceptance of the room itself. I built Joseph because I love that thought. Digital art is true. I'm sure the more our world emerges digitally, the more we will believe in it.
 
-
-<br />
-<br />
 <br />
 <br />
 <p align="center">
@@ -26,25 +16,18 @@ In the end, Joseph itself became a work of art and the metaphor: “The expressi
 </p>
 <br />
 <br />
-<br />
-<br />
-
-## JosephTV
-Figure one shows Google Authentication followed by a Firebase database query. After logging in, the data is confirmed and made available to the user in a grid view.
-If the user clicks one of the selected tiles in Figure two, he gets to another control element Figure three, which should create space for more specific information. At the bottom of this element there is a possible selection from the already existing playlists. Figure four shows the video player with its operating dynamics and the task flow, which commands you back to the detailed selection if a video is selected.
 
 
-## What have I learned?
-In this project you will:
-* AndroidTV Leanback Framework
-* Firebase Database, Google Authentication
+## How's the business going? 
+Joseph is a business idea that wants to bring digital art to the smart TV. It consists of a mobile and a smart TV application. In the mobile version, you can select works of art and then sync them with your account. Download JosephTv and stream high quality art on your smart TV. Click on the link below to be referred directly to the app store. Joseph is intended for a wide range of users from different industries, since art has space in every room. Joseph becomes an adaptable design element. The constant succession of new sculptures and the associated speed create a pleasant atmosphere, ideal for bars, lobbies, hotels, but also interesting for private use. Joseph shows art in the digital space and would like to connect with your space to create a new awesome Metaphor. Controversial analogies are perfect to be part of an external backdrop that is referenced to the digital space
+
+## How did I do this?
+I use Zbrush Dynamesh to model the base mesh and OpenGl / GLSL for scenery and shaders. Basically there are no limitations as the sculpture can be bared out into infinity, but in practice it has been shown that a certain size is decisive. The sculpture is reflected over a surface that provides an inductive scale valid for each sculpture, so that the scene is given support and stability. The sculpture rotates horizontally, the pivot point is set below the mesh so that a homogeneous sequence of the fading in and fading out scene is possible. Each scenery is a live rendering consisting of 25k to 50k polygons with orthogonal normals. I have set two light sources, each of which correlates with two different shaders and is mixed in the final output. The whole scenery is in full HD
+
 
 ## Libraries
-- [Gilde](http://square.github.io/retrofit/) 
+- [LeanBack](http://square.github.io/retrofit/) 
 - [Exoplayer](http://square.github.io/picasso/)
-- [Gson](http://square.github.io/picasso/)
-
-
 
 ## License
 Apache, see the [LICENSE](LICENSE) file.
