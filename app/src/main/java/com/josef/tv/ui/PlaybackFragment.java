@@ -221,15 +221,6 @@ public class PlaybackFragment extends VideoSupportFragment {
         MediaSource mediaSource = new ExtractorMediaSource.Factory(dataSourceFactory)
                 .createMediaSource(mediaSourceUri);
 
-
-        // MediaSource mediaSource =
-        //       new ExtractorMediaSource(
-        //             mediaSourceUri,
-        //           new DefaultDataSourceFactory(getActivity(), userAgent),
-        //         new DefaultExtractorsFactory(),
-        //       null,
-        //     null);
-
         mPlayer.prepare(mediaSource);
 
     }

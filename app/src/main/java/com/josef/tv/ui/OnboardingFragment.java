@@ -52,22 +52,31 @@ public class OnboardingFragment extends OnboardingSupportFragment {
     }
 
     private static final int[] pageTitles = {
-            R.string.onboarding_title_welcome,
-            R.string.onboarding_title_design,
-            R.string.onboarding_title_simple,
-            R.string.onboarding_title_project
+            R.string.onboarding_title_welcome1,
+            R.string.onboarding_title_welcome1,
+            R.string.onboarding_title_welcome1,
+            R.string.onboarding_title_welcome1,
+            R.string.onboarding_title_welcome1,
+            R.string.onboarding_title_welcome1,
+            R.string.onboarding_title_welcome1,
     };
     private static final int[] pageDescriptions = {
-            R.string.onboarding_description_welcome,
-            R.string.onboarding_description_design,
-            R.string.onboarding_description_simple,
-            R.string.onboarding_description_project
+            R.string.onboarding_title_blank,
+            R.string.onboarding_title_blank,
+            R.string.onboarding_title_blank,
+            R.string.onboarding_title_blank,
+            R.string.onboarding_title_blank,
+            R.string.onboarding_title_blank,
+            R.string.onboarding_title_blank,
     };
     private final int[] pageImages = {
-            R.drawable.tv_animation_a,
-            R.drawable.tv_animation_b,
-            R.drawable.tv_animation_c,
-            R.drawable.tv_animation_d
+            R.drawable.tv_animation_info_logo,
+            R.drawable.tv_animation_info_getjosephmobile,
+            R.drawable.tv_animation_info_selectartworks,
+            R.drawable.tv_animation_info_syncaccount,
+            R.drawable.tv_animation_info_getjosephtv,
+            R.drawable.tv_animation_info_chooseartworks,
+            R.drawable.tv_animation_info_pressplay
     };
     private static final long ANIMATION_DURATION = 500;
     private Animator mContentAnimator;
@@ -77,14 +86,15 @@ public class OnboardingFragment extends OnboardingSupportFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Set the logo to display a splash animation
-        setLogoResourceId(R.drawable.videos_by_google_banner);
-        setStartButtonText("hello");
+       // setLogoResourceId(R.drawable.videos_by_google_banner);
+        setStartButtonText("continue");
         return super.onCreateView(inflater, container, savedInstanceState);
     }
 
     @Override
     protected void onFinishFragment() {
         super.onFinishFragment();
+        //1280*1920 - XXXHDPI
         // Our onboarding is done
         // Update the shared preferences
         SharedPreferences.Editor sharedPreferencesEditor =
@@ -119,7 +129,7 @@ public class OnboardingFragment extends OnboardingSupportFragment {
     @Override
     protected View onCreateBackgroundView(LayoutInflater inflater, ViewGroup container) {
         View bgView = new View(getActivity());
-        bgView.setBackgroundColor(getResources().getColor(R.color.fastlane_background));
+        bgView.setBackgroundColor(getResources().getColor(R.color.default_background,getActivity().getTheme()));
         return bgView;
     }
 
@@ -150,7 +160,7 @@ public class OnboardingFragment extends OnboardingSupportFragment {
         fadeOut.addListener(new AnimatorListenerAdapter() {
             @Override
             public void onAnimationEnd(Animator animation) {
-                mContentView.setImageDrawable(getResources().getDrawable(pageImages[newPage]));
+                mContentView.setImageDrawable(getResources().getDrawable(pageImages[newPage],getActivity().getTheme()));
                 ((AnimationDrawable) mContentView.getDrawable()).start();
             }
         });
@@ -166,7 +176,7 @@ public class OnboardingFragment extends OnboardingSupportFragment {
 
     @Override
     protected Animator onCreateEnterAnimation() {
-        mContentView.setImageDrawable(getResources().getDrawable(pageImages[0]));
+        mContentView.setImageDrawable(getResources().getDrawable(pageImages[0],getActivity().getTheme()));
         ((AnimationDrawable) mContentView.getDrawable()).start();
         mContentAnimator = createFadeInAnimator(mContentView);
         return mContentAnimator;

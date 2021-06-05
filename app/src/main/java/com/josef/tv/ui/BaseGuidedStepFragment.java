@@ -2,6 +2,7 @@ package com.josef.tv.ui;
 
 
 import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 
 import androidx.leanback.app.GuidedStepSupportFragment;
@@ -16,7 +17,7 @@ public abstract class BaseGuidedStepFragment<T> extends GuidedStepSupportFragmen
 
     @SuppressWarnings("unchecked")
     @Override
-    public void onAttach(Activity activity) {
+    public void onAttach(Context context) {
         this.activity = getActivity();
         try {
             contract = (T) activity;
@@ -24,7 +25,7 @@ public abstract class BaseGuidedStepFragment<T> extends GuidedStepSupportFragmen
             throw new IllegalStateException(activity.getClass().getSimpleName()
                     + " does not implement " + getClass().getSimpleName() + "'s contract interface.", e);
         }
-        super.onAttach(activity);
+        super.onAttach(context);
     }
 
 

@@ -15,16 +15,22 @@
  */
 package com.josef.tv.mobile;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.widget.Toast;
+
 import com.josef.tv.base.BaseActivity;
 import com.josef.tv.tvleanback.R;
 import com.josef.tv.ui.AuthenticationActivity;
 import com.josef.tv.ui.OnboardingActivity;
+
+import static com.josef.tv.ui.OnboardingFragment.COMPLETED_ONBOARDING;
 
 public class SplashActivity extends BaseActivity {
 
@@ -48,12 +54,22 @@ public class SplashActivity extends BaseActivity {
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                getSplashActivity().startActivityForResult(
-                        new Intent(getSplashActivity(), AuthenticationActivity.class),RC_ONBOARD
-                );
+                if (!isboarded(COMPLETED_ONBOARDING, getApplicationContext())) {
+                    getSplashActivity().startActivityForResult(
+                            new Intent(getSplashActivity(), OnboardingActivity.class), RC_ONBOARD
+                    );
+                } else {
+                    getSplashActivity().startActivityForResult(
+                            new Intent(getSplashActivity(), AuthenticationActivity.class), RC_ONBOARD);
+                }
             }
         }, 3000);
 
+    }
+
+    public static Boolean isboarded(String key, Context context) {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+        return preferences.getBoolean(key, false);
     }
 
     @Override
@@ -64,7 +80,7 @@ public class SplashActivity extends BaseActivity {
             if (requestCode == RC_ONBOARD && resultCode == RESULT_OK) {
                 Log.d(TAG, "onActivityResult: ");
                 getSplashActivity().startActivityForResult(
-                        new Intent(getSplashActivity(),AuthenticationActivity.class),RC_ONAUTH
+                        new Intent(getSplashActivity(), AuthenticationActivity.class), RC_ONAUTH
                 );
                 getSplashActivity().finishAfterTransition();
             }
