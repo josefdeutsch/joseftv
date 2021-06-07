@@ -63,6 +63,7 @@ public class AuthenticationActivity extends BaseActivity {
     private static final String TAG = "AuthenticationActivity";
 
     public static FirebaseAuth mAuth;
+
     private static FirebaseAuth.AuthStateListener mAuthListener;
 
     private final IntentFilter auth_tokens = new IntentFilter("com.josef.tv.filter");
